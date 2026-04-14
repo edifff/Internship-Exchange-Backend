@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.processing.Pattern;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -111,7 +112,7 @@ public class User implements UserDetails {
             throw new IllegalArgumentException("Role cannot be null");
         }
 
-        if (roles.contains(role)) {
+        if (!roles.contains(role)) {
             return false;
         }
         return roles.remove(role);

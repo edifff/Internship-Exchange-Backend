@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LoginReqest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LogoutReqest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RefreshReqest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RegisterReqest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LoginRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LogoutRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RefreshRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RegisterRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.AuthResponse;
 import ru.rsreu.projectmanagment.identityservice.identityservice.service.AuthService;
 
@@ -23,22 +23,23 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody @Valid RegisterReqest registerReqest){
-        return authService.register(registerReqest);
+    public AuthResponse register(@RequestBody @Valid RegisterRequest registerRequest){
+        return authService.register(registerRequest);
     }
 
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody @Valid LoginReqest loginReqest){
-        return authService.login(loginReqest);
+    public AuthResponse login(@RequestBody @Valid LoginRequest loginRequest){
+        return authService.login(loginRequest);
     }
 
     @PostMapping("/refresh")
-    public AuthResponse refresh(@RequestBody RefreshReqest refreshReqest){
-        return authService.refresh(refreshReqest);
+    public AuthResponse refresh(@RequestBody RefreshRequest refreshRequest){
+        return authService.refresh(refreshRequest);
     }
 
-    public AuthResponse logout(@RequestBody LogoutReqest logoutReqest){
-        return authService.logout(logoutReqest);
+    @PostMapping("/logout")
+    public AuthResponse logout(@RequestBody LogoutRequest logoutRequest){
+        return authService.logout(logoutRequest);
     }
 
 }

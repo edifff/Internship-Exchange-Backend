@@ -1,4 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response;
 
 public class AuthResponse {
+    private String accessToken;
+    private String refreshToken;
+    private String tokenType = "Bearer";
 }

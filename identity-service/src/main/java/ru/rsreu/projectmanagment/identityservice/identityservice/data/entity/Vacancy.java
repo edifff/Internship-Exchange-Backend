@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity

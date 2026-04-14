@@ -2,29 +2,29 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LoginReqest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LogoutReqest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RefreshReqest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RegisterReqest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LoginRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LogoutRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RefreshRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RegisterRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.AuthResponse;
 
 @Service
 public class AuthService {
 
 
-    public AuthResponse register(@Valid RegisterReqest registerReqest) {
+    public AuthResponse register(@Valid RegisterRequest registerRequest) {
         return null;
     }
 
-    public AuthResponse login(@Valid LoginReqest loginReqest) {
+    public AuthResponse login(@Valid LoginRequest loginRequest) {
         return null;
     }
 
-    public AuthResponse refresh(RefreshReqest refreshReqest) {
+    public AuthResponse refresh(RefreshRequest refreshRequest) {
         return null;
     }
 
-    public AuthResponse logout(LogoutReqest logoutReqest) {
+    public AuthResponse logout(LogoutRequest logoutRequest) {
         return null;
     }
 }

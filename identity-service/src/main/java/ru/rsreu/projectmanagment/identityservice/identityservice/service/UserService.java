@@ -26,7 +26,9 @@ public class UserService {
     }
 
     public boolean deleteUser(UUID id) {
-        return userRepository.delete(id);
+        if (!userRepository.existsById(id)) return false;
+        userRepository.deleteById(id);
+        return true;
     }
 
     public UserDTO getById(UUID id) {
