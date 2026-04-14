@@ -1,7 +1,7 @@
-package ru.rsreu.projectmanagment.identityservice.identityservice.entity;
+package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import jakarta.persistence.*;
-import ru.rsreu.projectmanagment.identityservice.identityservice.entity.enums.Status;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 
 import java.time.LocalDate;
 import java.util.UUID;

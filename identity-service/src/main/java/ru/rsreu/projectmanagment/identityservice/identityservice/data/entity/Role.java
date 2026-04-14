@@ -1,11 +1,10 @@
-package ru.rsreu.projectmanagment.identityservice.identityservice.entity;
+package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import ru.rsreu.projectmanagment.identityservice.identityservice.entity.enums.RoleNames;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.RoleNames;
 
 import java.util.UUID;
 

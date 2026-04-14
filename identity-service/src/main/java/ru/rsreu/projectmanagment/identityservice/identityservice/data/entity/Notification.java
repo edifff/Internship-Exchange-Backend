@@ -1,10 +1,10 @@
-package ru.rsreu.projectmanagment.identityservice.identityservice.entity;
+package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import ru.rsreu.projectmanagment.identityservice.identityservice.entity.enums.MessageType;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.MessageType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 

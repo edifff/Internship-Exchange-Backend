@@ -1,9 +1,8 @@
-package ru.rsreu.projectmanagment.identityservice.identityservice.entity;
+package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package ru.rsreu.projectmanagment.identityservice.identityservice.entity.enums;
+package ru.rsreu.projectmanagment.identityservice.identityservice.data.enums;
 
 public enum Status {
     PENDING("pending"), REVIEWED("reviewed"), ACCEPTED("accepted"), REJECTED("rejected");
