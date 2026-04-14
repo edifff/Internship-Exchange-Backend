@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import ru.rsreu.projectmanagment.identityservice.identityservice.entity.enums.RoleNames;
 
 import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Entity
 @Table(name = "role", indexes = @Index(columnList = "name", unique = true))
 public class Role {
 

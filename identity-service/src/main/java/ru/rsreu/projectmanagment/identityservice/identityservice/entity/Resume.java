@@ -4,27 +4,29 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
-@Setter
 @Getter
+@Setter
 @Builder
 @Entity
+@Table(name = "resumes")
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "guide")
-public class Guide {
+public class Resume {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", unique = true)
+    private StudentProfile student;
 
-    @Column(name = "content", nullable = false, length = 10000)
+    private String titel;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "content", nullable = false)
-    private LocalDate created_at;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }

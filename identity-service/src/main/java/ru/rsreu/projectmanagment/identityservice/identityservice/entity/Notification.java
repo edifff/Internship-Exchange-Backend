@@ -1,14 +1,23 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import ru.rsreu.projectmanagment.identityservice.identityservice.entity.enums.MessageType;
-import tools.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
+
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Entity
+@Table(name = "notifications")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
