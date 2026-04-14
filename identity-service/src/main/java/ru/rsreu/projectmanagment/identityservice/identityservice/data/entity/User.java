@@ -2,10 +2,8 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.transaction.Transactional;
+import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,6 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -94,6 +93,28 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return isActive && deletedAt==null;
+    }
+
+
+    public boolean addRole(Role role) {
+        if (role == null) {
+            throw new IllegalArgumentException("Role cannot be null");
+        }
+
+        if (roles.contains(role)) {
+            return false;
+        }
+        return roles.add(role);
+    }
+    public boolean deleteRole(Role role){
+        if (role == null) {
+            throw new IllegalArgumentException("Role cannot be null");
+        }
+
+        if (roles.contains(role)) {
+            return false;
+        }
+        return roles.remove(role);
     }
 
 }
