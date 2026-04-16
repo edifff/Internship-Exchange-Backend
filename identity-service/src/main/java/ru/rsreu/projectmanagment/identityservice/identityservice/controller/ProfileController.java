@@ -19,7 +19,7 @@ public class ProfileController {
 
     @GetMapping("/me")
     public ProfileDTO getMyProfile(Authentication auth){
-        return profileService.getNyProfile(auth);
+        return profileService.getMyProfil(auth);
     }
 
     @PutMapping("/student")

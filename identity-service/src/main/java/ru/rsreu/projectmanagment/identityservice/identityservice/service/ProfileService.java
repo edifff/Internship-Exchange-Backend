@@ -10,7 +10,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.respon
 
 @Service
 public class ProfileService {
-    public ProfileDTO getNyProfile(Authentication auth) {
+    public ProfileDTO getMyProfil(Authentication auth) {
         return new ProfileDTO();
     }
 

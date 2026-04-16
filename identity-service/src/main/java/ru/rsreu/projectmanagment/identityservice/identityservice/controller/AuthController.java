@@ -38,8 +38,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public AuthResponse logout(@RequestBody LogoutRequest logoutRequest){
-        return authService.logout(logoutRequest);
+    public void logout(@RequestBody LogoutRequest logoutRequest){
+         authService.logout(logoutRequest);
     }
 
 }

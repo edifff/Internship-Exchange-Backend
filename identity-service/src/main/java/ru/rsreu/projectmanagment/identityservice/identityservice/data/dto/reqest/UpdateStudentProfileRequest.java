@@ -2,10 +2,12 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqes
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import lombok.Getter;
 
 
 import java.time.Year;
 
+@Getter
 public class UpdateStudentProfileRequest {
     @Pattern(regexp = "^[^0-9]*$")
     private String fullName;

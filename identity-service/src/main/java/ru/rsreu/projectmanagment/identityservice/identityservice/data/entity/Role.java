@@ -42,4 +42,9 @@ public class Role {
     public String getName(){
         return this.name.getRole();
     }
+
+    @Override
+    public String toString() {
+        return this.name.getRole();
+    }
 }
