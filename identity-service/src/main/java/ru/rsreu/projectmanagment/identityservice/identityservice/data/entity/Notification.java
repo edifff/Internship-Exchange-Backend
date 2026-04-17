@@ -24,10 +24,10 @@ public class Notification {
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "massage_type")
+    @Column(name = "mеssage_type")
     private MessageType messageType;
 
     @JdbcTypeCode(SqlTypes.JSON)

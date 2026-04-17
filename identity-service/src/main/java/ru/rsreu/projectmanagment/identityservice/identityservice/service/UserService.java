@@ -2,7 +2,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.UpdateRolesRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateRolesRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.UserDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Role;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.User;

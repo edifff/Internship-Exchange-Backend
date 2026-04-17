@@ -32,13 +32,13 @@ public class EmployerProfile {
 
     @Column(name = "wedsite_link")
     @URL
-    private java.net.URL websiteLink;
+    private String websiteLink;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "logo_file_id")
     private FileEntity logo;
 
 
-    @OneToMany(mappedBy = "employer_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Vacancy> vacansies;
 }

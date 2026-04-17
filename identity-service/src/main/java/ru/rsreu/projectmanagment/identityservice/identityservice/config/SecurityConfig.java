@@ -30,7 +30,11 @@ public class SecurityConfig {
         httpSecurity.sessionManagement(session-> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**" ).permitAll()
+                .requestMatchers(
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/auth/**" ).permitAll()
                 .anyRequest().authenticated());
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();

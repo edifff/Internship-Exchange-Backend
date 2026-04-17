@@ -20,6 +20,7 @@ public class Role {
     private UUID id;
 
     @Column(nullable = false, length = 50, unique = true)
+    @Enumerated(EnumType.STRING)
     private RoleNames name;
 
     @Override

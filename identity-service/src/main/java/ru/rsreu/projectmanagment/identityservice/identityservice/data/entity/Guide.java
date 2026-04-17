@@ -24,6 +24,6 @@ public class Guide {
     @Column(name = "content", nullable = false, length = 10000)
     private String content;
 
-    @Column(name = "content", nullable = false)
-    private LocalDate created_at;
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
 }

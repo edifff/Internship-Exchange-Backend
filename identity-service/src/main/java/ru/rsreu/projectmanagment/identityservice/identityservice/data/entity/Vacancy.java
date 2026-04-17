@@ -16,7 +16,7 @@ public class Vacancy {
 
     @ManyToOne()
     @JoinColumn(name = "employer_id")
-    private EmployerProfile employerProfiles;
+    private EmployerProfile employerId;
 
     @Column(name = "title")
     private String title;
@@ -34,6 +34,7 @@ public class Vacancy {
     private LocalDate endDate;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     @Column(name = "created_at")

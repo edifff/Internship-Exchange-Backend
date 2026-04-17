@@ -1,19 +1,16 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.CloseableThreadContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LoginRequest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.LogoutRequest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RefreshRequest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reqest.RegisterRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LoginRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LogoutRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RefreshRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RegisterRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.AuthResponse;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.RefreshToken;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Role;
@@ -23,7 +20,6 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RoleRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.UserRepository;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -37,11 +33,11 @@ public class AuthService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("{api.security.token.refresh-expiration}")
+    @Value("${api.security.token.refresh-expiration}")
     private long refreshExprirationDays;
 
     private AuthResponse buildAuthResponse(User user){
-        String accessToken = jwtService.gemerateAccessToken(user);
+        String accessToken = jwtService.generateAccessToken(user);
         String refreshToken= jwtService.generateRefreshToken(user);
 
         refreshTokenRepository.save(
