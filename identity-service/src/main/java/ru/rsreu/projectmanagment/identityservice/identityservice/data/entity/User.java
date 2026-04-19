@@ -25,7 +25,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "USER", indexes = @Index(columnList = "email", unique = true))
+@Table(name = "USERS", indexes = @Index(columnList = "email", unique = true))
 @SQLRestriction("deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
@@ -102,8 +102,8 @@ public class User implements UserDetails {
             throw new IllegalArgumentException("Role cannot be null");
         }
 
-        if (roles.contains(role)) {
-            return false;
+        if (roles == null) {
+            roles = new HashSet<>();
         }
         return roles.add(role);
     }

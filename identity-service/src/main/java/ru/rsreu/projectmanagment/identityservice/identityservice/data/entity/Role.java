@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "role", indexes = @Index(columnList = "name", unique = true))
+@Table(name = "roles", indexes = @Index(columnList = "name", unique = true))
 public class Role {
 
     @Id

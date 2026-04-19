@@ -2,11 +2,15 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LoginRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LogoutRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RefreshRequest;
@@ -20,6 +24,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RoleRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.UserRepository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -51,17 +56,22 @@ public class AuthService {
         return new AuthResponse(accessToken, refreshToken);
     }
 
+    @Transactional
     public AuthResponse register(@Valid RegisterRequest registerRequest) {
-        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            throw new RuntimeException("User already exists");
-        }
+
         Role role = roleRepository.findByName(RoleNames.ROLE_STUDENT)
-                .orElseThrow(() -> new RuntimeException("Default role not found"));
+                .orElseThrow(() ->  new ResponseStatusException(HttpStatus.CONFLICT, "User already exists"));
         User user=User.builder()
                 .email(registerRequest.getEmail())
-                .passwordHash(registerRequest.getPassword())
+                .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
+                .isActive(true)
+                .createdAt(Instant.now())
                 .build();
-        userRepository.save(user);
+        user.addRole(role);
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");        }
         return buildAuthResponse(user);
     }
 
@@ -74,9 +84,12 @@ public class AuthService {
         if(!user.isEnabled()){
             throw new RuntimeException("User is disabled");
         }
+        user.setLastLoginAt(Instant.now());
+        userRepository.save(user);
         return buildAuthResponse(user);
     }
 
+    @Transactional
     public AuthResponse refresh(RefreshRequest refreshRequest) {
         RefreshToken stored=refreshTokenRepository.findByToken(refreshRequest.getRefreshToken())
                 .orElseThrow(()->new RuntimeException("Invalid refresh token"));
@@ -95,6 +108,7 @@ public class AuthService {
         return buildAuthResponse(user);
     }
 
+    @Transactional
     public void logout(LogoutRequest logoutRequest) {
         RefreshToken token = refreshTokenRepository.findByToken(logoutRequest.getRefreshToken())
                 .orElseThrow(()->new RuntimeException("Token not found"));
