@@ -1,10 +1,11 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.EmployerProfileRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateEmployerProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateStudentProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.EmployerProfileDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.ProfileDTO;
@@ -12,6 +13,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.respon
 import ru.rsreu.projectmanagment.identityservice.identityservice.service.ProfileService;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/profiles")
 public class ProfileController {
 
@@ -19,6 +21,7 @@ public class ProfileController {
 
     @GetMapping("/me")
     public ProfileDTO getMyProfile(Authentication auth){
+        System.out.println("AUTH IN CONTROLLER: " + auth);
         return profileService.getMyProfil(auth);
     }
 
@@ -30,7 +33,7 @@ public class ProfileController {
 
     @PutMapping("/employer")
     @PreAuthorize("hasRole('EMPLOYER')")
-    public EmployerProfileDTO updateEmployer(Authentication auth, @RequestBody EmployerProfileRequest reqest){
+    public EmployerProfileDTO updateEmployer(Authentication auth, @RequestBody UpdateEmployerProfileRequest reqest){
         return profileService.updateEmployerProfile(auth, reqest);
     }
 }

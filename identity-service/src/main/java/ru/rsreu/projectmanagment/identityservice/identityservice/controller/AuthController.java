@@ -1,6 +1,8 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,7 +34,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Вход в систему", description = "Возвращает пару JWT-токенов при успешной аутентификации")
+    @Operation(summary = "Вход в систему",
+            description = "Возвращает пару JWT-токенов при успешной аутентификации")
     public AuthResponse login(@RequestBody @Valid LoginRequest loginRequest){
         return authService.login(loginRequest);
     }

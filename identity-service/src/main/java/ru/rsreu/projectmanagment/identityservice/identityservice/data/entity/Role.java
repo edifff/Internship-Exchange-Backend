@@ -41,7 +41,7 @@ public class Role {
     }
 
     public String getName(){
-        return this.name.getRole();
+        return this.name.name();
     }
 
     @Override

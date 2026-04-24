@@ -12,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "student_profile")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,7 +31,6 @@ public class StudentProfile {
     @OneToOne(mappedBy = "student", fetch = FetchType.LAZY)
     private Resume resume;
 
-    @Min(value = 1950, message = "Необходимо ввести год не позднее 1950")
     private Year graduationYear;
 
     @ManyToOne(fetch = FetchType.LAZY)

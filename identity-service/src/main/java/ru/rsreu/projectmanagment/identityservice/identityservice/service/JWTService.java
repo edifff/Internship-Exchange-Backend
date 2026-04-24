@@ -82,7 +82,7 @@ public class JWTService {
         return jwt.getSubject();
     }
 
-    public List<Role> extractRoles( DecodedJWT decodedJWT){
-        return decodedJWT.getClaim("roles").asList(Role.class);
+    public List<String> extractRoles( DecodedJWT decodedJWT){
+        return decodedJWT.getClaim("roles").asList(String.class);
     }
 }

@@ -3,15 +3,22 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reque
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.FileEntity;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Resume;
 
 
 import java.time.Year;
+import java.util.UUID;
 
 @Getter
 public class UpdateStudentProfileRequest {
     @Pattern(regexp = "^[^0-9]*$")
     private String fullName;
 
-    @Min(1950)
-    private Year graduationYear;
+    private Integer graduationYear;
+
+    private UUID resume;
+
+    private UUID avatar;
+
 }

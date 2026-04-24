@@ -24,31 +24,31 @@ public class UserController {
     private UserService userService;
 
     @GetMapping()
-    @Operation(summary = "Получение списка всех пользователей")
+    @Operation(summary = "Получение списка всех пользователей", security = @SecurityRequirement(name = "bearerAuth"))
     public List<UserDTO> getAllUser(){
         return userService.getAllUser();
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "Удаление пользователя по его id")
+    @Operation(summary = "Удаление пользователя по его id", security = @SecurityRequirement(name = "bearerAuth"))
     public boolean deleteUser(@PathVariable UUID id){
         return userService.deleteUser(id);
     }
 
     @GetMapping("/{id}")
-    @Operation(summary = "Получение пользователя по его id")
+    @Operation(summary = "Получение пользователя по его id", security = @SecurityRequirement(name = "bearerAuth"))
     public UserDTO getById(@PathVariable UUID id){
         return userService.getById(id);
     }
 
     @PatchMapping("/{id}/roles")
-    @Operation(summary = "Обновление роли пользователя")
+    @Operation(summary = "Обновление роли пользователя",security = @SecurityRequirement(name = "bearerAuth"))
     public UserDTO updateRoles(@PathVariable UUID id, @RequestBody UpdateRolesRequest request){
         return userService.updateRole(id, request);
     }
 
     @DeleteMapping("/{id}/roles")
-    @Operation(summary = "Удаление роли пользователя")
+    @Operation(summary = "Удаление роли пользователя",security = @SecurityRequirement(name = "bearerAuth"))
     public boolean deleteRoles(@PathVariable UUID id, @RequestBody UpdateRolesRequest request){
         return userService.deleteRole(id, request);
     }

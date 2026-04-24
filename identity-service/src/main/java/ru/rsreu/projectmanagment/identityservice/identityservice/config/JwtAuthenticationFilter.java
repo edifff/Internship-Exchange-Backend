@@ -10,48 +10,64 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Role;
+import ru.rsreu.projectmanagment.identityservice.identityservice.service.CustomUserDetailService;
 import ru.rsreu.projectmanagment.identityservice.identityservice.service.JWTService;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
-
+    private final CustomUserDetailService userDetailService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain)
             throws ServletException, IOException {
+        System.out.println("JWT FILTER TRIGGERED");
         String authHeader = request.getHeader("Authorization");
-        if(authHeader != null && authHeader.startsWith("Bearer ")){
-            String token=authHeader.substring(7);
+        System.out.println("AUTH HEADER: " + authHeader);
 
-            try{
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            System.out.println("TOKEN: " + token);
+
+            try {
                 DecodedJWT jwt = jwtService.verifyToken(token);
+                System.out.println("JWT VERIFIED");
 
                 String email = jwtService.extractUserEmail(jwt);
-                List<Role> roles = jwtService.extractRoles(jwt);
+                System.out.println("EMAIL: " + email);
 
-                List<SimpleGrantedAuthority> authorities = roles.stream()
-                        .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName().toUpperCase()))
-                        .toList();
+                UserDetails userDetails = userDetailService.loadUserByUsername(email);
+                System.out.println("USER LOADED: " + userDetails);
+
+                System.out.println("AUTHORITIES: " + userDetails.getAuthorities());
+
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, authorities);
+                        new UsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }catch (AuthenticationException authenticationException){
+                System.out.println("AUTH SET");
+
+            } catch (Exception e) {
+                e.printStackTrace(); // ВАЖНО
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid JWT token");
                 return;
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

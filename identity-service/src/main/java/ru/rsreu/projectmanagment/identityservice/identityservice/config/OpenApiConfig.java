@@ -30,6 +30,7 @@ public class OpenApiConfig {
     private SecurityScheme createBearerScheme() {
         return new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
+                .name("bearerAuth")
                 .scheme("bearer")
                 .bearerFormat("JWT")
                 .description("Вставь access-токен (без префикса 'Bearer ')");

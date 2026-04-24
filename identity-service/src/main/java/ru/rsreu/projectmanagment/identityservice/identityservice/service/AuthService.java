@@ -16,13 +16,9 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reques
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RefreshRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RegisterRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.AuthResponse;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.RefreshToken;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Role;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.User;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.RoleNames;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RefreshTokenRepository;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RoleRepository;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.UserRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -37,6 +33,10 @@ public class AuthService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ProfileStudentRepository profileStudentRepository;
+    private final EmployerProfileRepository employerProfileRepository;
+    private final ResumeRepository resumeRepository;
+    private final FileEntityRepository fileEntityRepository;
 
     @Value("${api.security.token.refresh-expiration}")
     private long refreshExprirationDays;
@@ -57,35 +57,117 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthResponse register(@Valid RegisterRequest registerRequest) {
+    public AuthResponse register(@Valid RegisterRequest request) {
 
-        Role role = roleRepository.findByName(RoleNames.ROLE_STUDENT)
-                .orElseThrow(() ->  new ResponseStatusException(HttpStatus.CONFLICT, "User already exists"));
-        User user=User.builder()
-                .email(registerRequest.getEmail())
-                .passwordHash(passwordEncoder.encode(registerRequest.getPassword()))
+        Role role = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role"));
+        
+        User user = User.builder()
+                .email(request.getEmail())
+                .passwordHash(passwordEncoder.encode(request.getPassword()))
                 .isActive(true)
                 .createdAt(Instant.now())
                 .build();
+
         user.addRole(role);
+
         try {
-            userRepository.save(user);
+            user = userRepository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");        }
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+        }
+
+        createProfileForRole(user, role);
+
         return buildAuthResponse(user);
     }
 
+    private Resume createResumeForRole(StudentProfile studentProfile) {
+
+        Resume resume=Resume.builder()
+                .student(studentProfile)
+                .createdAt(LocalDate.now())
+                .titel("Resume "+studentProfile.getFullName())
+                .build();
+
+        studentProfile.setResume(resume);
+
+        resumeRepository.save(resume);
+
+        return resume;
+    }
+
+    private void createProfileForRole(User user, Role role) {
+        String roleName = role.getName();
+
+        switch (roleName) {
+            case "ROLE_STUDENT" -> {
+                StudentProfile profile = new StudentProfile();
+                profile.setUser(user);
+
+                profile = profileStudentRepository.save(profile);
+
+                Resume resume = createResumeForRole(profile);
+
+                FileEntity avatar = createFileEntuty(resume, user);
+
+                profile.setResume(resume);
+                profile.setAvatar(avatar);
+
+                profileStudentRepository.save(profile);
+            }
+            case "ROLE_EMPLOYER" -> {
+                EmployerProfile profile = new EmployerProfile();
+                profile.setUser(user);
+
+                profile = employerProfileRepository.save(profile);
+
+                FileEntity logo = createFileEntuty(user);
+                profile.setLogo(logo);
+
+                employerProfileRepository.save(profile);
+            }
+            default -> throw new IllegalStateException("Unsupported role: " + roleName);
+        }
+    }
+
+    //Для создвния аватарки компании
+    private FileEntity createFileEntuty(User user) {
+
+        FileEntity fileEntity=FileEntity.builder().owner(user)
+                .createdAt(LocalDate.now())
+                .build();
+
+        fileEntityRepository.save(fileEntity);
+
+        return fileEntity;
+    }
+
+    //Для создвния резюме компании
+    private FileEntity createFileEntuty(Resume resume, User user) {
+
+        FileEntity fileEntity=FileEntity.builder()
+                .resume(resume)
+                .owner(user)
+                .createdAt(LocalDate.now())
+                .build();
+
+        fileEntityRepository.save(fileEntity);
+
+        return fileEntity;
+    }
+
     public AuthResponse login(@Valid LoginRequest loginRequest) {
-        User user=userRepository.findByEmail(loginRequest.getEmail())
+        User user=userRepository.findByEmailWithRoles(loginRequest.getEmail())
                 .orElseThrow(()-> new RuntimeException("User not found"));
+        
         if(!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())){
             throw new RuntimeException("Invalid credentials");
         }
-        if(!user.isEnabled()){
-            throw new RuntimeException("User is disabled");
-        }
         user.setLastLoginAt(Instant.now());
+        
         userRepository.save(user);
+        
         return buildAuthResponse(user);
     }
 
@@ -93,16 +175,18 @@ public class AuthService {
     public AuthResponse refresh(RefreshRequest refreshRequest) {
         RefreshToken stored=refreshTokenRepository.findByToken(refreshRequest.getRefreshToken())
                 .orElseThrow(()->new RuntimeException("Invalid refresh token"));
+        
         if(stored.isRevoked()){
             throw new RuntimeException("Refresh token revoked");
         }
+        
         if(stored.getExpiresAt().isBefore(LocalDate.now())){
             throw new RuntimeException("Refresh token revoked");
         }
         DecodedJWT jwt=jwtService.verifyToken(refreshRequest.getRefreshToken());
         String email= jwtService.extractUserEmail(jwt);
 
-        User user = userRepository.findByEmail(email)
+        User user = userRepository.findByEmailWithRoles(email)
                 .orElseThrow(()-> new EntityNotFoundException("User not found"));
 
         return buildAuthResponse(user);
@@ -110,9 +194,11 @@ public class AuthService {
 
     @Transactional
     public void logout(LogoutRequest logoutRequest) {
+
         RefreshToken token = refreshTokenRepository.findByToken(logoutRequest.getRefreshToken())
                 .orElseThrow(()->new RuntimeException("Token not found"));
         token.setRevoked(true);
+
         refreshTokenRepository.save(token);
     }
 }
