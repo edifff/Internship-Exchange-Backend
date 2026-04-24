@@ -15,6 +15,7 @@ public class UpdateStudentProfileRequest {
     @Pattern(regexp = "^[^0-9]*$")
     private String fullName;
 
+    @Min(value = 1959, message = "graduation Year cant be less than 1950")
     private Integer graduationYear;
 
     private UUID resume;

@@ -122,25 +122,10 @@ public class AuthService {
 
                 profile = employerProfileRepository.save(profile);
 
-                FileEntity logo = createFileEntuty(user);
-                profile.setLogo(logo);
-
                 employerProfileRepository.save(profile);
             }
             default -> throw new IllegalStateException("Unsupported role: " + roleName);
         }
-    }
-
-    //Для создвния аватарки компании
-    private FileEntity createFileEntuty(User user) {
-
-        FileEntity fileEntity=FileEntity.builder().owner(user)
-                .createdAt(LocalDate.now())
-                .build();
-
-        fileEntityRepository.save(fileEntity);
-
-        return fileEntity;
     }
 
     //Для создвния резюме компании

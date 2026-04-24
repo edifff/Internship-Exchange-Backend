@@ -69,43 +69,57 @@ public class ProfileService {
         return user;
     }
 
-    public StudentProfileDTO updateStudentProfile(Authentication auth, UpdateStudentProfileRequest reqest) {
+    public StudentProfileDTO updateStudentProfile(Authentication auth, UpdateStudentProfileRequest request) {
         User user = getUserFromAuth(auth);
         StudentProfile studentProfile = profileStudentRepository.findByUserId(user.getId());
 
-        if (reqest.getResume() != null) {
-            Resume resume = resumeRepository.findById(reqest.getResume())
+        if (request.getResume() != null) {
+            Resume resume = resumeRepository.findById(request.getResume())
                     .orElseThrow(() -> new RuntimeException("Resume not found"));
             studentProfile.setResume(resume);
         }
 
-        if (reqest.getAvatar() != null) {
-            FileEntity avatar = fileEntityRepository.findById(reqest.getAvatar())
+        if (request.getAvatar() != null) {
+            FileEntity avatar = fileEntityRepository.findById(request.getAvatar())
                     .orElseThrow(() -> new RuntimeException("File not found"));
             studentProfile.setAvatar(avatar);
         }
-        studentProfile.setFullName(reqest.getFullName());
-        studentProfile.setGraduationYear(Year.of(reqest.getGraduationYear()));
+
+        if (request.getFullName() != null) {
+            studentProfile.setFullName(request.getFullName());
+        }
+
+        if (request.getGraduationYear() != null) {
+            studentProfile.setGraduationYear(Year.of(request.getGraduationYear()));
+        }
 
         profileStudentRepository.save(studentProfile);
         return studentProfileMapper.toDTO(studentProfile, user);
     }
 
-    public EmployerProfileDTO updateEmployerProfile(Authentication auth, UpdateEmployerProfileRequest reqest) {
+    public EmployerProfileDTO updateEmployerProfile(Authentication auth, UpdateEmployerProfileRequest request) {
         User user = getUserFromAuth(auth);
+
         EmployerProfile employerProfile = employerProfileRepository.findByUserId(user.getId());
 
-        if (reqest.getLogo() != null) {
-            FileEntity avatar = fileEntityRepository.findById(reqest.getLogo())
-                    .orElseThrow(() -> new RuntimeException("File not found"));
-            employerProfile.setLogo(avatar);
+        if (employerProfile == null) {
+            employerProfile = EmployerProfile.builder()
+                    .user(user)
+                    .build();
         }
 
-        employerProfile.setCompanyName(reqest.getCompanyName());
-        employerProfile.setDescription(reqest.getDescription());
-        employerProfile.setWebsiteLink(reqest.getWebsiteLink());
+        if (request.getLogo() != null) {
+            FileEntity logo = fileEntityRepository.findById(request.getLogo())
+                    .orElseThrow(() -> new RuntimeException("File not found"));
+            employerProfile.setLogo(logo);
+        }
+
+        employerProfile.setCompanyName(request.getCompanyName());
+        employerProfile.setDescription(request.getDescription());
+        employerProfile.setWebsiteLink(request.getWebsiteLink());
 
         employerProfileRepository.save(employerProfile);
+
         return employerProfileMapper.toDTO(employerProfile, user);
     }
 

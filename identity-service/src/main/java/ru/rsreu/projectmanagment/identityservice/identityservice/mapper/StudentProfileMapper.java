@@ -16,11 +16,11 @@ public interface StudentProfileMapper {
 
     @Mapping(target = "graduationYear", source = "studentProfile.graduationYear")
     default Integer map(Year year) {
-        return year != null ? year.getValue() : 2000;
+        return year != null ? year.getValue() : null;
     }
 
     default Year map(Integer year) {
-        return year != null ? Year.of(year) : Year.of(2000);
+        return year != null ? Year.of(year) : null;
     }
 
     @Mapping(target = "resume", source = "studentProfile.resume")
