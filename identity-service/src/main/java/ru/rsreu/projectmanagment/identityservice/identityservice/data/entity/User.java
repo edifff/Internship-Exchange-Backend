@@ -28,7 +28,7 @@ import java.util.UUID;
 @Table(name = "USERS", indexes = @Index(columnList = "email", unique = true))
 @SQLRestriction("deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -66,37 +66,6 @@ public class User implements UserDetails {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList();
     }
 
-    @Override
-    public @Nullable String getPassword() {
-        return this.passwordHash;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return deletedAt==null;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isActive && deletedAt==null;
-    }
-
-
     public boolean addRole(Role role) {
         if (role == null) {
             throw new IllegalArgumentException("Role cannot be null");
@@ -116,5 +85,10 @@ public class User implements UserDetails {
             return false;
         }
         return roles.remove(role);
+    }
+
+    public boolean hasRole(String role){
+        return roles.stream()
+                .anyMatch(r -> r.getName().equals(role));
     }
 }

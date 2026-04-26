@@ -1,12 +1,20 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Year;
+import java.util.UUID;
 
 @Data
-public class StudentProfileDTO {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class StudentProfileDTO{
     private String fullName;
-    private Year graduationYear;
-    private String avatarUrl;
+    private Integer graduationYear;
+    private UUID avatarUrl;
+    private UUID resume;
 }

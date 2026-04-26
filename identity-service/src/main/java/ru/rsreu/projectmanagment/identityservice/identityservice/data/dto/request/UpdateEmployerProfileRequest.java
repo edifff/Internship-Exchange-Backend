@@ -1,12 +1,11 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 import java.util.UUID;
 
 @Getter
-public class EmployerProfileRequest {
+public class UpdateEmployerProfileRequest {
     private String companyName;
 
     private String description;
@@ -14,5 +13,4 @@ public class EmployerProfileRequest {
     private String websiteLink;
 
     private UUID logo;
-
 }

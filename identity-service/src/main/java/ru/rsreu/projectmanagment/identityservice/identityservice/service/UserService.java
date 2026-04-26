@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public UserDTO getById(UUID id) {
-       User user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         return userMapper.toDTO(user);
     }

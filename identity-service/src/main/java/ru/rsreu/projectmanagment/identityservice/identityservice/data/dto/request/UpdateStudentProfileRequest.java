@@ -6,12 +6,18 @@ import lombok.Getter;
 
 
 import java.time.Year;
+import java.util.UUID;
 
 @Getter
 public class UpdateStudentProfileRequest {
     @Pattern(regexp = "^[^0-9]*$")
     private String fullName;
 
-    @Min(1950)
-    private Year graduationYear;
+    @Min(value = 1959, message = "graduation Year cant be less than 1950")
+    private Integer graduationYear;
+
+    private UUID resume;
+
+    private UUID avatar;
+
 }

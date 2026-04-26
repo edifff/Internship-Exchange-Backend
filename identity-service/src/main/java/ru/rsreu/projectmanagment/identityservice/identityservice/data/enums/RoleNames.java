@@ -1,7 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.data.enums;
 
 public enum RoleNames {
-    ROLE_STUDENT("student"), ROLE_EMPLOYER("employer"), ROLE_ADMIN("admin");
+    ROLE_STUDENT("STUDENT"), ROLE_EMPLOYER("EMPLOYER"), ROLE_ADMIN("ADMIN");
 
     private final String role;
 

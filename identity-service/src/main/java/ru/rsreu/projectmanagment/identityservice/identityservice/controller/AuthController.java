@@ -32,7 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Вход в систему", description = "Возвращает пару JWT-токенов при успешной аутентификации")
+    @Operation(summary = "Вход в систему",
+            description = "Возвращает пару JWT-токенов при успешной аутентификации")
     public AuthResponse login(@RequestBody @Valid LoginRequest loginRequest){
         return authService.login(loginRequest);
     }
@@ -46,7 +47,7 @@ public class AuthController {
     @PostMapping("/logout")
     @Operation(summary = "Выход из системы", description = "Отзывает refresh-токен, завершая сессию")
     public void logout(@RequestBody LogoutRequest logoutRequest){
-         authService.logout(logoutRequest);
+        authService.logout(logoutRequest);
     }
 
 }
