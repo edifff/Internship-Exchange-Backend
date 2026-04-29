@@ -3,8 +3,12 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.repositor
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.EmployerProfile;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface EmployerProfileRepository extends JpaRepository<EmployerProfile, UUID> {
-    EmployerProfile findByUserId(UUID userId);
+
+    Optional<EmployerProfile> findById(UUID uuid);
+
+    EmployerProfile findByUserId(UUID uuid);
 }

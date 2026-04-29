@@ -39,6 +39,6 @@ public class EmployerProfile {
     private FileEntity logo;
 
 
-    @OneToMany(mappedBy = "employerId", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Vacancy> vacansies;
 }

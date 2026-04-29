@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateRolesRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.UserDTO;
@@ -27,33 +28,44 @@ public class UserService {
 
     public boolean deleteUser(UUID id) {
         if (!userRepository.existsById(id)) return false;
+
         userRepository.deleteById(id);
+
         return true;
     }
 
     public UserDTO getById(UUID id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         return userMapper.toDTO(user);
     }
 
     public UserDTO updateRole(UUID id, UpdateRolesRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         Role role=roleRepository.findByName(request.getRole())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         user.addRole(role);
+
         userRepository.save(user);
+
         return userMapper.toDTO(user);
     }
 
     public boolean deleteRole(UUID id, UpdateRolesRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         Role role=roleRepository.findByName(request.getRole())
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         boolean isDelete=user.deleteRole(role);
+
         userRepository.save(user);
+
         return isDelete;
     }
 }

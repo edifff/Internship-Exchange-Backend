@@ -8,7 +8,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Use
 import java.util.Optional;
 import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User, UUID>{
+public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
     Optional<User> findById(UUID id);
 
     @Query("SELECT u FROM User u JOIN FETCH u.roles WHERE u.email = :email")

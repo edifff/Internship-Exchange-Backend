@@ -26,13 +26,13 @@ public class ProfileController {
         return profileService.getMyProfil(auth);
     }
 
-    @PutMapping("/student")
+    @PatchMapping("/student")
     @PreAuthorize("hasRole('STUDENT')")
     public StudentProfileDTO updateStudent(Authentication auth, @RequestBody UpdateStudentProfileRequest reqest){
         return profileService.updateStudentProfile(auth, reqest);
     }
 
-    @PutMapping("/employer")
+    @PatchMapping("/employer")
     @PreAuthorize("hasRole('EMPLOYER')")
     public EmployerProfileDTO updateEmployer(Authentication auth, @RequestBody UpdateEmployerProfileRequest reqest){
         return profileService.updateEmployerProfile(auth, reqest);
