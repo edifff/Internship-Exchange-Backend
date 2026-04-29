@@ -21,7 +21,7 @@ public class PublicVacancyController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение конкретной вакансии")
-    public VacancyDTO get(@PathVariable UUID vacancy){
+    public VacancyDTO get(@PathVariable("id") UUID vacancy){
        return publicVacancyService.get(vacancy);
     }
 
@@ -33,19 +33,19 @@ public class PublicVacancyController {
 
     @GetMapping("/all/{id}")
     @Operation(summary = "Получение всех компании")
-    public List<VacancyDTO> getAllCompanyVacancy(@PathVariable UUID id){
+    public List<VacancyDTO> getAllCompanyVacancy(@PathVariable("id") UUID id){
         return publicVacancyService.getAllCompanyVacancy(id);
     }
 
     @GetMapping("/allActivity/{id}")
     @Operation(summary = "Получение всех одобренных неархивированных вакансий")
-    public List<VacancyDTO> getAllActivityCompanyVacancy(@PathVariable UUID id){
+    public List<VacancyDTO> getAllActivityCompanyVacancy(@PathVariable("id") UUID id){
         return publicVacancyService.getAllActivityCompanyVacancy(id);
     }
 
     @GetMapping("/allDeleted/{id}")
     @Operation(summary = "Получение всех одобренных архивированных вакансий")
-    public List<VacancyDTO> getAllDeletedCompanyVacancy(@PathVariable UUID id){
+    public List<VacancyDTO> getAllDeletedCompanyVacancy(@PathVariable("id") UUID id){
         return  publicVacancyService.getAllDeletedCompanyVacancy(id);
     }
 

@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,7 +29,7 @@ public class AdminVacancyModerationController {
 
     @PatchMapping("{id}")
     @Operation(summary = "Изменение статуса вакансии после рассмотрения")
-    public void setStatus(@PathVariable UUID id, String status){
+    public void setStatus(@PathVariable("id") UUID id,@RequestBody String status){
         adminVacancyModerationService.setStatus(id, status);
     }
 }

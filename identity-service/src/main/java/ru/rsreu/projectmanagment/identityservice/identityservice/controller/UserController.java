@@ -31,25 +31,25 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удаление пользователя по его id", security = @SecurityRequirement(name = "bearerAuth"))
-    public boolean deleteUser(@PathVariable UUID id){
+    public boolean deleteUser(@PathVariable("id") UUID id){
         return userService.deleteUser(id);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Получение пользователя по его id", security = @SecurityRequirement(name = "bearerAuth"))
-    public UserDTO getById(@PathVariable UUID id){
+    public UserDTO getById(@PathVariable("id") UUID id){
         return userService.getById(id);
     }
 
     @PatchMapping("/{id}/roles")
     @Operation(summary = "Обновление роли пользователя",security = @SecurityRequirement(name = "bearerAuth"))
-    public UserDTO updateRoles(@PathVariable UUID id, @RequestBody UpdateRolesRequest request){
+    public UserDTO updateRoles(@PathVariable("id") UUID id, @RequestBody UpdateRolesRequest request){
         return userService.updateRole(id, request);
     }
 
     @DeleteMapping("/{id}/roles")
     @Operation(summary = "Удаление роли пользователя",security = @SecurityRequirement(name = "bearerAuth"))
-    public boolean deleteRoles(@PathVariable UUID id, @RequestBody UpdateRolesRequest request){
+    public boolean deleteRoles(@PathVariable("id") UUID id, @RequestBody UpdateRolesRequest request){
         return userService.deleteRole(id, request);
     }
 }

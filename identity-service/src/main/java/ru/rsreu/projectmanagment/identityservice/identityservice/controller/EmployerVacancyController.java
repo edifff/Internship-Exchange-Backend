@@ -26,12 +26,12 @@ public class EmployerVacancyController {
     }
 
     @PatchMapping("/{id}")
-    public VacancyDTO update(@PathVariable UUID id, @RequestBody UpdateVacancyRequest request){
+    public VacancyDTO update(@PathVariable("id") UUID id, @RequestBody UpdateVacancyRequest request){
         return employerVacancyService.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public void getAll(@PathVariable UUID id){
+    public void getAll(@PathVariable("id") UUID id){
         employerVacancyService.archive(id);
     }
 }
