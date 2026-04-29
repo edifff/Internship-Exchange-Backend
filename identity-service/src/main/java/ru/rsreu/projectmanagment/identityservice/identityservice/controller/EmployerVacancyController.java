@@ -1,5 +1,6 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @RequestMapping("/employer/vacancies")
 @AllArgsConstructor
 @PreAuthorize("hasRole('EMPLOYER')")
+@Tag(name = "Vacancies Management", description = "C U D операции вакансий (только Employer)")
 public class EmployerVacancyController {
 
     private final EmployerVacancyService employerVacancyService;

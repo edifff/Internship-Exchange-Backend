@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +29,16 @@ public class ProfileController {
 
     @PatchMapping("/student")
     @PreAuthorize("hasRole('STUDENT')")
+    @Operation(summary = "Обновление профиля",
+            description = "Доступен только с ролью студента")
     public StudentProfileDTO updateStudent(Authentication auth, @RequestBody UpdateStudentProfileRequest reqest){
         return profileService.updateStudentProfile(auth, reqest);
     }
 
     @PatchMapping("/employer")
     @PreAuthorize("hasRole('EMPLOYER')")
+    @Operation(summary = "Обновление профиля",
+            description = "Доступен только с ролью компании")
     public EmployerProfileDTO updateEmployer(Authentication auth, @RequestBody UpdateEmployerProfileRequest reqest){
         return profileService.updateEmployerProfile(auth, reqest);
     }
