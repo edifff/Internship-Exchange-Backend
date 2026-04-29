@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/admin/vacancies/pending")
 @AllArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
-@Tag(name = "Vacancies Management", description = "подтверждение и обновление статуса (только ADMIN)")
+@Tag(name = "Vacancies Management ADM", description = "подтверждение и обновление статуса (только ADMIN)")
 public class AdminVacancyModerationController {
 
     private final AdminVacancyModerationService adminVacancyModerationService;

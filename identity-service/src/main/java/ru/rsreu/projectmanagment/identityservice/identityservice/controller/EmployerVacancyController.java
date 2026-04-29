@@ -15,7 +15,7 @@ import java.util.UUID;
 @RequestMapping("/employer/vacancies")
 @AllArgsConstructor
 @PreAuthorize("hasRole('EMPLOYER')")
-@Tag(name = "Vacancies Management", description = "C U D операции вакансий (только Employer)")
+@Tag(name = "Vacancies Management EMP", description = "C U D операции вакансий (только Employer)")
 public class EmployerVacancyController {
 
     private final EmployerVacancyService employerVacancyService;
