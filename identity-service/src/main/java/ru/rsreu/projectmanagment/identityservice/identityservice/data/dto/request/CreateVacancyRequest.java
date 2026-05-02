@@ -14,6 +14,7 @@ public class CreateVacancyRequest {
 
     @NotBlank
     private UUID employerUUID;
+
     @Schema(example = "Царь во дворца")
     private String title;
 

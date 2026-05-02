@@ -31,7 +31,7 @@ public class EmployerVacancyController {
     }
 
     @DeleteMapping("/{id}")
-    public void getAll(@PathVariable("id") UUID id){
+    public void archive(@PathVariable("id") UUID id){
         employerVacancyService.archive(id);
     }
 }

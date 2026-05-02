@@ -18,11 +18,13 @@ public class Specialty {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true)
+    @Column
     private String code;
 
+    @Column
     private String name;
 
+    @Column
     private boolean isActive;
 
 }
