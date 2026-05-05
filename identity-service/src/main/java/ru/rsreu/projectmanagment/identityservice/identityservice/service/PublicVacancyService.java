@@ -1,11 +1,14 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ru.rsreu.projectmanagment.identityservice.identityservice.config.VacancySpecificationConfig;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.EmployerProfile;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.filter.VacancyFilter;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.EmployerProfileRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
@@ -20,11 +23,20 @@ public class PublicVacancyService {
     private final VacancyRepository vacancyRepository;
     private final VacancyMapper vacancyMapper;
     private final EmployerProfileRepository employerProfileRepository;
+    private final VacancySpecificationConfig vacancySpecificationConfig;
 
     public VacancyDTO get(UUID id) {
         Vacancy vacancy = getVacancy(id);
 
         return vacancyMapper.toDTO(vacancy);
+    }
+
+    public List<VacancyDTO> search(VacancyFilter filter){
+        Specification<Vacancy> specification = vacancySpecificationConfig.build(filter);
+
+        List<Vacancy> vacancies = vacancyRepository.findAll(specification);
+
+        return vacancyMapper.toDTO(vacancies);
     }
 
     public List<VacancyDTO> getAll() {

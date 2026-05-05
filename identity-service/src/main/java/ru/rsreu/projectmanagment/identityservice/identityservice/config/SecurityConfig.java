@@ -19,15 +19,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-import static org.springframework.security.authorization.SingleResultAuthorizationManager.permitAll;
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilterConfig jwtAuthenticationFilterConfig;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
@@ -42,7 +40,7 @@ public class SecurityConfig {
                         "/swagger-ui.html",
                         "/auth/**" ).permitAll()
                 .anyRequest().authenticated());
-        httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(jwtAuthenticationFilterConfig, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 

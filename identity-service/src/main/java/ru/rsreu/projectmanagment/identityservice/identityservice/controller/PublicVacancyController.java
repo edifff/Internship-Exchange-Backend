@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateVacancyRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.filter.VacancyFilter;
 import ru.rsreu.projectmanagment.identityservice.identityservice.service.PublicVacancyService;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
@@ -49,4 +50,9 @@ public class PublicVacancyController {
         return  publicVacancyService.getAllDeletedCompanyVacancy(id);
     }
 
+    @PostMapping("/search")
+    @Operation(summary = "Поиск с фильтром")
+    public List<VacancyDTO> search(@RequestBody VacancyFilter filter) {
+        return publicVacancyService.search(filter);
+    }
 }
