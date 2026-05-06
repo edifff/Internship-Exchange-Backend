@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -29,5 +30,5 @@ public class Favorite {
     @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 
-    private Instant createdAt;
+    private LocalDate createdAt;
 }
