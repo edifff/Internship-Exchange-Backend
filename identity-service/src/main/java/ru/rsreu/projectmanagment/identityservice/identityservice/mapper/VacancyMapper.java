@@ -1,19 +1,42 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateVacancyRequest;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
+import ru.rsreu.projectmanagment.identityservice.identityservice.helper.SpecialtyResolver;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(
+        componentModel = "spring",
+        uses = SpecialtyResolver.class
+)
 public interface VacancyMapper {
 
     @Mapping(source = "startedAt", target = "startDate")
     @Mapping(source = "endedAt", target = "endDate")
+    @Mapping(
+            target = "specialties",
+            source = "specialtys",
+            qualifiedByName = "mapSpecialties"
+    )
     Vacancy toEntity(CreateVacancyRequest request);
+
+    @BeanMapping(nullValuePropertyMappingStrategy =
+                    NullValuePropertyMappingStrategy.IGNORE
+    )
+    @Mapping(source = "startedAt", target = "startDate")
+    @Mapping(source = "endedAt", target = "endDate")
+    @Mapping(
+            target = "specialties",
+            source = "specialtys",
+            qualifiedByName = "mapSpecialties"
+    )
+    void updateVacancy(UpdateVacancyRequest request,
+            @MappingTarget Vacancy vacancy
+    );
 
     @Mapping(source = "startDate", target = "startedAt")
     @Mapping(source = "endDate", target = "endedAt")

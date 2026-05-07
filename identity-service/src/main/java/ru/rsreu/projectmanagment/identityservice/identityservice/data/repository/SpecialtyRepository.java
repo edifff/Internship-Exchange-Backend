@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface SpecialtyRepository extends JpaRepository<Specialty, UUID> {
 
     List<Specialty> id(UUID id);
+
+    Specialty findByName(String name);
 }

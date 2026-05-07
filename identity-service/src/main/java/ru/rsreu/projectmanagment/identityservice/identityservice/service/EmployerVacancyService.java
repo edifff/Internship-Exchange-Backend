@@ -13,6 +13,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Use
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.EmployerProfileRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtyRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
 
@@ -24,14 +25,13 @@ import java.util.UUID;
 public class EmployerVacancyService {
 
     private final VacancyRepository vacancyRepository;
-    private final VacancyMapper mapper;
     private final EmployerProfileRepository employerProfileRepository;
     private final VacancyMapper vacancyMapper;
 
     public void create(CreateVacancyRequest createVacancyResponse) {
         EmployerProfile employer = getCurrentEmployer();
 
-        Vacancy vacancy = mapper.toEntity(createVacancyResponse);
+        Vacancy vacancy = vacancyMapper.toEntity(createVacancyResponse);
 
         vacancy.setEmployer(employer);
         vacancy.setCreatedAt(LocalDate.now());
@@ -45,29 +45,7 @@ public class EmployerVacancyService {
     public VacancyDTO update(UUID id, UpdateVacancyRequest request) {
         Vacancy vacancy = getOwnedVacancy(id);
 
-        if(request.getTitle()!=null){
-            vacancy.setTitle(request.getTitle());
-        }
-
-        if(request.getDescription()!=null){
-            vacancy.setDescription(request.getDescription());
-        }
-
-        if (request.getCity()!=null){
-            vacancy.setCity(request.getCity());
-        }
-
-        if (request.getStartedAt()!=null){
-            vacancy.setStartDate(request.getStartedAt());
-        }
-
-        if(request.getEndedAt()!=null){
-            vacancy.setEndDate(request.getEndedAt());
-        }
-
-        if(request.getSpecialtys()!=null){
-            vacancy.setSpecialties(request.getSpecialtys());
-        }
+        vacancyMapper.updateVacancy(request, vacancy);
 
         vacancy.setUpdatedAt(LocalDate.now());
         vacancy.setStatus(Status.PENDING);

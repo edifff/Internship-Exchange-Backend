@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class IdentityServiceApplication {
 
-     //TODO Избранное
     //TODO Отзывы о компаниях
     //TODO Рейтинг
     //TODO Отклик на ванаксию

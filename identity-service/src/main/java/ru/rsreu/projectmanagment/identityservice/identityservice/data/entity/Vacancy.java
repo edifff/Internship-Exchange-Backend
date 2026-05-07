@@ -59,9 +59,6 @@ public class Vacancy {
             joinColumns = @JoinColumn(name = "vacancy_id"),
             inverseJoinColumns = @JoinColumn(name = "specialty_id")
     )
-    public Set<Specialty> specialties;
+    private Set<Specialty> specialties;
 
-    public void setSpecialties(List<String> specialtys) {
-
-    }
 }
