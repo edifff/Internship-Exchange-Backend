@@ -3,10 +3,8 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LoginRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LogoutRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RefreshRequest;
@@ -27,6 +25,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Регистрация нового пользователя")
+    @ResponseStatus(HttpStatus.CREATED)
     public AuthResponse register(@RequestBody @Valid RegisterRequest registerRequest){
         return authService.register(registerRequest);
     }
