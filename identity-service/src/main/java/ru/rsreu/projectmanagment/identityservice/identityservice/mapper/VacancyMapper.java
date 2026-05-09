@@ -5,13 +5,13 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reques
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
-import ru.rsreu.projectmanagment.identityservice.identityservice.helper.SpecialtyResolver;
+import ru.rsreu.projectmanagment.identityservice.identityservice.handler.SpecialtyHandler;
 
 import java.util.List;
 
 @Mapper(
         componentModel = "spring",
-        uses = SpecialtyResolver.class
+        uses = SpecialtyHandler.class
 )
 public interface VacancyMapper {
 

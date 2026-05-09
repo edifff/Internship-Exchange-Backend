@@ -7,6 +7,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reques
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.SpecialtyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.SpecialtyMapper;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class SpecialtyService {
 
     public SpecialtyDTO update(UUID id, UpdateSpecialtyRequest request) {
         Specialty specialty = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spesialty not found"));
+                .orElseThrow(() -> new NotFoundException("Spesialty not found"));
 
         if( request.getCode() != null ){
             specialty.setCode(request.getCode());
@@ -49,7 +50,7 @@ public class SpecialtyService {
 
     public SpecialtyDTO get(UUID id) {
         Specialty specialty = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spesialty not found"));
+                .orElseThrow(() -> new NotFoundException("Spesialty not found"));
 
         return mapper.toDTO(specialty);
     }
@@ -62,7 +63,7 @@ public class SpecialtyService {
 
     public void delete(UUID id) {
         Specialty specialty = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spesialty not found"));
+                .orElseThrow(() -> new NotFoundException("Spesialty not found"));
         repository.delete(specialty);
     }
 }

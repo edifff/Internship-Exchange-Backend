@@ -11,6 +11,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Stat
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.filter.VacancyFilter;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.EmployerProfileRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
 
 import java.util.List;
@@ -72,12 +73,12 @@ public class PublicVacancyService {
 
     private EmployerProfile getEmployer(UUID id){
         return employerProfileRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Empoyer is null"));
+                .orElseThrow(() -> new NotFoundException("Empoyer is null"));
     }
 
     private Vacancy getVacancy(UUID id){
        return vacancyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vacancy not find"));
+                .orElseThrow(() -> new NotFoundException("Vacancy not find"));
     }
 
 }

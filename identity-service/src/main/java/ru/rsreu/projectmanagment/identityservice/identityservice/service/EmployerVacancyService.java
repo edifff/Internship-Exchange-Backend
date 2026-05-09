@@ -2,6 +2,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -13,8 +14,8 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Use
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.EmployerProfileRepository;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtyRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
 
 import java.time.LocalDate;
@@ -66,7 +67,7 @@ public class EmployerVacancyService {
 
     private Vacancy getOwnedVacancy(UUID vacancyId) {
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
-                .orElseThrow(() -> new RuntimeException("Vacancy not found"));
+                .orElseThrow(() -> new NotFoundException("Vacancy not found"));
 
         EmployerProfile currentEmployer = getCurrentEmployer();
 
@@ -75,7 +76,7 @@ public class EmployerVacancyService {
         }
 
         if (vacancy.getDeletedAt() != null) {
-            throw new RuntimeException("Vacancy is archived");
+            throw new NotFoundException("Vacancy is archived");
         }
 
         return vacancy;
@@ -88,7 +89,7 @@ public class EmployerVacancyService {
         Object principal = authentication.getPrincipal();
 
         if (!(principal instanceof UserPrincipal userPrincipal)) {
-            throw new RuntimeException("Invalid authentication principal");
+            throw new BadCredentialsException("Invalid authentication principal");
         }
 
         return employerProfileRepository.findByUserId(userPrincipal.getId());

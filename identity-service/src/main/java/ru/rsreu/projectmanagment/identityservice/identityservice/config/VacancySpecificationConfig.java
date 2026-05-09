@@ -2,7 +2,6 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.query.JpqlQueryBuilder;
 import org.springframework.stereotype.Component;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
@@ -16,6 +15,7 @@ import java.util.List;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 
 @Component
 @AllArgsConstructor
@@ -59,7 +59,7 @@ public class VacancySpecificationConfig {
             if (filter.getSpecialtyId() != null) {
 
                 Specialty specialty = specialtyRepository.findById(filter.getSpecialtyId())
-                        .orElseThrow(() -> new RuntimeException("Specialty not found"));
+                        .orElseThrow(() -> new NotFoundException("Specialty not found"));
 
                 Join<Object, Object> join = root.join("specialties");
                 predicates.add(criteriaBuilder.equal(join.get("id"), filter.getSpecialtyId()));

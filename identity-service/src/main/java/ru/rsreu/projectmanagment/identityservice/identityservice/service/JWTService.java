@@ -48,7 +48,7 @@ public class JWTService {
                             .toList())
                     .sign(getAlgoritm());
         }catch (JWTCreationException exception){
-            throw new RuntimeException("Ошибка при генерации JWT токена", exception);
+            throw new JWTCreationException("Ошибка при генерации JWT токена", exception);
         }
     }
 
@@ -62,7 +62,7 @@ public class JWTService {
                     .withJWTId(UUID.randomUUID().toString())
                     .sign(getAlgoritm());
         } catch (JWTCreationException exception){
-            throw new RuntimeException("Ошибка при генерации JWT токена", exception);
+            throw new JWTCreationException("Ошибка при генерации JWT токена", exception);
         }
 
     }
@@ -74,7 +74,7 @@ public class JWTService {
                     .build()
                     .verify(token);
         }catch (JWTVerificationException exception){
-            throw new RuntimeException("Недействительный JWT токен", exception);
+            throw new JWTVerificationException("Недействительный JWT токен", exception);
         }
     }
 

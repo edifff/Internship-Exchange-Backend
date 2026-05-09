@@ -6,6 +6,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.respon
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class AdminVacancyModerationService {
 
     public void setStatus(UUID id, String status) {
         Vacancy vacancy = vacancyRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Vacancy not found"));
+                .orElseThrow(() -> new NotFoundException("Vacancy not found"));
 
         vacancy.setStatus(Status.valueOf(status.toUpperCase()));
 

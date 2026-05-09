@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import ru.rsreu.projectmanagment.identityservice.identityservice.handler.JwtAccessDeniedHandler;
+import ru.rsreu.projectmanagment.identityservice.identityservice.handler.JwtAuthenticationEntryPointHandler;
 
 import java.util.Arrays;
 
@@ -26,6 +28,8 @@ import java.util.Arrays;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilterConfig jwtAuthenticationFilterConfig;
+    private final JwtAuthenticationEntryPointHandler jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) {
@@ -33,6 +37,9 @@ public class SecurityConfig {
         httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         httpSecurity.sessionManagement(session-> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        httpSecurity.exceptionHandling(ex -> ex
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler));
         httpSecurity.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/v3/api-docs/**",

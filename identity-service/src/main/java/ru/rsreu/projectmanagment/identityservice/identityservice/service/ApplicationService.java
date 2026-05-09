@@ -1,5 +1,6 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
+import jakarta.persistence.EntityExistsException;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.ProfileStudentRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.ResumeRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.ForbiddenException;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.ApplicationMapper;
 
 import java.time.LocalDate;
@@ -35,23 +38,23 @@ public class ApplicationService {
         UUID studentId = principal.getId();
 
         if (applicationRepository.existsByStudentUserIdAndVacancyId( studentId, request.getVacancyId())) {
-            throw new RuntimeException("Application already exists");
+            throw new EntityExistsException("Application already exists");
         }
 
         Vacancy vacancy = vacancyRepository.findById(
                 request.getVacancyId()
-        ).orElseThrow(() -> new RuntimeException("Vacancy not found"));
+        ).orElseThrow(() -> new NotFoundException("Vacancy not found"));
 
-        if (vacancy.getDeletedAt() != null) { throw new RuntimeException("Vacancy archived");
+        if (vacancy.getDeletedAt() != null) { throw new ForbiddenException("Vacancy archived");
         }
 
         if (vacancy.getStatus() != Status.ACCEPTED) {
-            throw new RuntimeException( "Vacancy unavailable");
+            throw new ForbiddenException( "Vacancy unavailable");
         }
 
         Resume resume = resumeRepository.findById(
                 request.getResumeId()
-        ).orElseThrow(() -> new RuntimeException("Resume not found"));
+        ).orElseThrow(() -> new NotFoundException("Resume not found"));
 
         StudentProfile student = studentRepository.findByUserId(studentId);
 

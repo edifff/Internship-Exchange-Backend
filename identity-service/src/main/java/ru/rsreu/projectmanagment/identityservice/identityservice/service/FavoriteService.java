@@ -11,6 +11,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vac
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.FavoriteRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.ProfileStudentRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.VacancyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
 
 import java.time.LocalDate;
@@ -35,7 +36,7 @@ public class FavoriteService {
 
         StudentProfile student = studentRepository.findByUserId(userId);
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
-                .orElseThrow(() -> new RuntimeException("Vacancy not found"));
+                .orElseThrow(() -> new NotFoundException("Vacancy not found"));
 
         Favorite favorite = Favorite.builder()
                 .student(student)

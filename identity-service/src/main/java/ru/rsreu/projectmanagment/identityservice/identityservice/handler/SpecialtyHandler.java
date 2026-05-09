@@ -1,4 +1,4 @@
-package ru.rsreu.projectmanagment.identityservice.identityservice.helper;
+package ru.rsreu.projectmanagment.identityservice.identityservice.handler;
 
 import lombok.AllArgsConstructor;
 import org.mapstruct.Named;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class SpecialtyResolver {
+public class SpecialtyHandler {
 
     private final SpecialtyRepository repository;
 

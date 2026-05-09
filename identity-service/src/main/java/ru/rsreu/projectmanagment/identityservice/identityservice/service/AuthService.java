@@ -1,16 +1,15 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LoginRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.LogoutRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.RefreshRequest;
@@ -22,6 +21,8 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Use
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RefreshTokenRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RoleRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.UserRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.ConflictException;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -58,7 +59,7 @@ public class AuthService {
     public AuthResponse register(@Valid RegisterRequest request) {
 
         Role role = roleRepository.findByName(request.getRole()).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role"));
+                () -> new ConflictException("User already exists"));
         User user = User.builder()
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
@@ -74,21 +75,20 @@ public class AuthService {
 
         } catch (DataIntegrityViolationException e) {
 
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+            throw new ConflictException("User already exists");
 
         }
+
         return buildAuthResponse(user);
     }
 
     public AuthResponse login(@Valid LoginRequest loginRequest) {
 
         User user = userRepository.findByEmailWithRoles(loginRequest.getEmail()).orElseThrow(
-                () -> new RuntimeException("User not found"));
+                () -> new NotFoundException("User not found"));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
-
-            throw new RuntimeException("Invalid credentials");
-
+            throw new BadCredentialsException("Invalid username or password");
         }
         user.setLastLoginAt(Instant.now());
 
@@ -100,15 +100,15 @@ public class AuthService {
     @Transactional
     public AuthResponse refresh(RefreshRequest refreshRequest) {
 
-        RefreshToken stored = refreshTokenRepository.findByToken(refreshRequest.getRefreshToken()).orElseThrow(
-                () -> new RuntimeException("Invalid refresh token"));
+        RefreshToken stored = refreshTokenRepository.findByToken(refreshRequest.getRefreshToken())
+                .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
 
         if (stored.isRevoked()) {
-            throw new RuntimeException("Refresh token revoked");
+            throw new BadCredentialsException("Refresh token has been revoked");
         }
 
         if (stored.getExpiresAt().isBefore(LocalDate.now())) {
-            throw new RuntimeException("Refresh token revoked");
+            throw new BadCredentialsException("Refresh token has expired");
         }
 
         DecodedJWT jwt = jwtService.verifyToken(refreshRequest.getRefreshToken());
@@ -116,7 +116,7 @@ public class AuthService {
         String email = jwtService.extractUserEmail(jwt);
 
         User user = userRepository.findByEmailWithRoles(email).orElseThrow(
-                () -> new EntityNotFoundException("User not found"));
+                () -> new NotFoundException("User not found"));
 
         return buildAuthResponse(user);
     }
@@ -124,7 +124,7 @@ public class AuthService {
     @Transactional
     public void logout(LogoutRequest logoutRequest) {
         RefreshToken token = refreshTokenRepository.findByToken(logoutRequest.getRefreshToken()).orElseThrow(
-                () -> new RuntimeException("Token not found"));
+                () -> new BadCredentialsException("Token not found"));
         token.setRevoked(true);
         refreshTokenRepository.save(token);
     }

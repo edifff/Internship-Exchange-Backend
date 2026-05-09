@@ -3,7 +3,6 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.EmployerProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateEmployerProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateStudentProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.EmployerProfileDTO;
@@ -11,6 +10,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.respon
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.StudentProfileDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.*;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.EmployerProfileMapper;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.StudentProfileMapper;
 
@@ -65,7 +65,7 @@ public class ProfileService {
         UserPrincipal userPrincipal = (UserPrincipal) auth.getPrincipal();
 
         User user = userRepository.findById(userPrincipal.getId()).orElseThrow(
-                ()->new RuntimeException("Пользователь не найден в базе при получении профиля"));
+                ()->new NotFoundException("Пользователь не найден в базе при получении профиля"));
         return user;
     }
 
@@ -75,13 +75,13 @@ public class ProfileService {
 
         if (request.getResume() != null) {
             Resume resume = resumeRepository.findById(request.getResume())
-                    .orElseThrow(() -> new RuntimeException("Resume not found"));
+                    .orElseThrow(() -> new NotFoundException("Resume not found"));
             studentProfile.setResume(resume);
         }
 
         if (request.getAvatar() != null) {
             FileEntity avatar = fileEntityRepository.findById(request.getAvatar())
-                    .orElseThrow(() -> new RuntimeException("File not found"));
+                    .orElseThrow(() -> new NotFoundException("File not found"));
             studentProfile.setAvatar(avatar);
         }
 
@@ -122,7 +122,7 @@ public class ProfileService {
 
         if (request.getLogo() != null) {
             FileEntity logo = fileEntityRepository.findById(request.getLogo())
-                    .orElseThrow(() -> new RuntimeException("File not found"));
+                    .orElseThrow(() -> new NotFoundException("File not found"));
             employerProfile.setLogo(logo);
         }
 

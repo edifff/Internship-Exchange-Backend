@@ -1,7 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
+
 import lombok.AllArgsConstructor;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateRolesRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.UserDTO;
@@ -9,6 +9,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Rol
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.User;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.RoleRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.UserRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.UserMapper;
 
 import java.util.List;
@@ -36,17 +37,17 @@ public class UserService {
 
     public UserDTO getById(UUID id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         return userMapper.toDTO(user);
     }
 
     public UserDTO updateRole(UUID id, UpdateRolesRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         Role role=roleRepository.findByName(request.getRole())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("Role not found"));
 
         user.addRole(role);
 
@@ -57,10 +58,10 @@ public class UserService {
 
     public boolean deleteRole(UUID id, UpdateRolesRequest request) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         Role role=roleRepository.findByName(request.getRole())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("Role not found"));
 
         boolean isDelete=user.deleteRole(role);
 
