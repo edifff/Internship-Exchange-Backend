@@ -15,6 +15,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFo
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyMapper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class FavoriteService {
         Favorite favorite = Favorite.builder()
                 .student(student)
                 .vacancy(vacancy)
-                .createdAt(LocalDate.now())
+                .createdAt(LocalDateTime.now())
                 .build();
 
         favoriteRepository.save(favorite);

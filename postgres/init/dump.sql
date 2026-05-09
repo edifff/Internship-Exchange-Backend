@@ -145,7 +145,7 @@ CREATE TABLE public.favorites (
 
 ALTER TABLE public.favorites OWNER TO postgres;
 
-ALTER TABLE favorites
+ALTER TABLE public.favorites
     ADD CONSTRAINT unique_favorite UNIQUE (student_id, vacancy_id);
 --
 -- Name: files; Type: TABLE; Schema: public; Owner: postgres

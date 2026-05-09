@@ -37,6 +37,6 @@ public class Notification {
     @Column(name = "is_read")
     private boolean isRead;
 
-    @Column(name="createdAt")
+    @Column(name="created_at")
     private LocalDate createdAt;
 }

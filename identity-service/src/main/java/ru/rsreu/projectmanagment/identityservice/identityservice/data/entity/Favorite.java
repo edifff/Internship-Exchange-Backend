@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -30,5 +31,5 @@ public class Favorite {
     @JoinColumn(name = "vacancy_id")
     private Vacancy vacancy;
 
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 }

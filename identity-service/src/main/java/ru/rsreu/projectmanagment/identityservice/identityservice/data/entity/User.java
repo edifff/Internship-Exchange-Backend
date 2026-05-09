@@ -25,7 +25,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "USERS", indexes = @Index(columnList = "email", unique = true))
+@Table(name = "users", indexes = @Index(columnList = "email", unique = true))
 @SQLRestriction("deleted_at IS NULL")
 @EntityListeners(AuditingEntityListener.class)
 public class User {

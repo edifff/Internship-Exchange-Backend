@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @Component
 @AllArgsConstructor
 public class JwtAuthenticationEntryPointHandler implements AuthenticationEntryPoint {
+
     private final ObjectMapper objectMapper;
 
     @Override
