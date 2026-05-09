@@ -2,6 +2,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateVacancyRequest;
@@ -21,6 +22,7 @@ public class EmployerVacancyController {
     private final EmployerVacancyService employerVacancyService;
 
     @PostMapping("/")
+    @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody CreateVacancyRequest createVacancyResponse){
         employerVacancyService.create(createVacancyResponse);
     }

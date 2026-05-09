@@ -3,6 +3,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateSpecialtyRequest;
@@ -27,6 +28,7 @@ public class SpecialtyController {
     @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Только для админа")
+    @ResponseStatus(HttpStatus.CREATED)
     public void create(@RequestBody CreateSpecialtyRequest createSpecialtyRequest){
         service.create(createSpecialtyRequest);
     }
