@@ -79,6 +79,12 @@ public class ProfileService {
 
         StudentProfile studentProfile = profileStudentRepository.findByUserId(user.getId());
 
+        if (studentProfile == null) {
+            log.debug("Student profile not found. Creating new profile for UserId: {}", user.getId());
+            studentProfile = StudentProfile.builder().user(user).build();
+        }
+
+
         if (request.getResume() != null) {
             Resume resume = resumeRepository.findById(request.getResume())
                     .orElseThrow(() -> new NotFoundException("Resume not found"));
@@ -110,6 +116,7 @@ public class ProfileService {
         EmployerProfile employerProfile = employerProfileRepository.findByUserId(user.getId());
 
         if (employerProfile == null) {
+            log.debug("Student employer not found. Creating new profile for UserId: {}", user.getId());
             employerProfile = EmployerProfile.builder()
                     .user(user)
                     .build();
