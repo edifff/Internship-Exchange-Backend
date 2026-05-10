@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateSpecialtyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateSpecialtyRequest;
@@ -13,6 +14,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.Specialt
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SpecialtyService {
@@ -21,6 +23,7 @@ public class SpecialtyService {
     private final SpecialtyMapper mapper;
 
     public void create(CreateSpecialtyRequest createSpecialtyRequest) {
+        log.info("Create specialty | Code: {}, Name: {}", createSpecialtyRequest.getCode(), createSpecialtyRequest.getName());
         Specialty specialty = mapper.toEntity(createSpecialtyRequest);
         specialty.setActive(true);
 
@@ -44,6 +47,7 @@ public class SpecialtyService {
         }
 
         repository.save(specialty);
+        log.info("Update specialty | Id: {}", id);
 
         return mapper.toDTO(specialty);
     }
@@ -52,6 +56,7 @@ public class SpecialtyService {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));
 
+        log.debug("Get specialty | Id: {}", id);
         return mapper.toDTO(specialty);
     }
 
@@ -65,5 +70,7 @@ public class SpecialtyService {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));
         repository.delete(specialty);
+        log.info("Delete specialty | Id: {}", id);
+
     }
 }

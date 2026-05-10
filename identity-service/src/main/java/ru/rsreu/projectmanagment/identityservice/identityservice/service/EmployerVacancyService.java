@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyM
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class EmployerVacancyService {
@@ -31,6 +33,7 @@ public class EmployerVacancyService {
 
     public void create(CreateVacancyRequest createVacancyResponse) {
         EmployerProfile employer = getCurrentEmployer();
+        log.info("Creating vacancy by employer: {}", employer.getUserId());
 
         Vacancy vacancy = vacancyMapper.toEntity(createVacancyResponse);
 
@@ -41,10 +44,12 @@ public class EmployerVacancyService {
         vacancy.setStatus(Status.PENDING);
 
         vacancyRepository.save(vacancy);
+        log.info("Vacancy created: id={}, status=PENDING", vacancy.getId());
     }
 
     public VacancyDTO update(UUID id, UpdateVacancyRequest request) {
         Vacancy vacancy = getOwnedVacancy(id);
+        log.info("Updating vacancy: id={}, by employer: {}", id, vacancy.getEmployer().getUserId());
 
         vacancyMapper.updateVacancy(request, vacancy);
 
@@ -53,15 +58,18 @@ public class EmployerVacancyService {
 
         vacancyRepository.save(vacancy);
 
+        log.info("Vacancy updated: id={}, status reset to PENDING", id);
         return vacancyMapper.toDTO(vacancy);
     }
 
     public void archive(UUID id) {
         Vacancy vacancy = getOwnedVacancy(id);
+        log.info("Archiving vacancy: id={}", id);
 
         if (vacancy.getDeletedAt() == null) {
             vacancy.setDeletedAt(LocalDate.now());
             vacancyRepository.save(vacancy);
+            log.info("Vacancy archived successfully: id={}", id);
         }
     }
 

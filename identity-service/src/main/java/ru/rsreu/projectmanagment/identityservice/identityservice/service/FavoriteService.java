@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class FavoriteService {
@@ -32,9 +34,11 @@ public class FavoriteService {
         UUID userId = getUserId(auth);
 
         if (favoriteRepository.existsByStudentUserIdAndVacancyId(userId, vacancyId)) {
+            log.debug("Already in favorites | User: {}, Vacancy: {}", userId, vacancyId);
             return;
         }
 
+        log.info("Add to favorites | User: {}, Vacancy: {}", userId, vacancyId);
         StudentProfile student = studentRepository.findByUserId(userId);
         Vacancy vacancy = vacancyRepository.findById(vacancyId)
                 .orElseThrow(() -> new NotFoundException("Vacancy not found"));
@@ -50,12 +54,14 @@ public class FavoriteService {
 
     public void removeFromFavorites(UUID vacancyId, Authentication auth) {
         UUID userId = getUserId(auth);
+        log.info("Remove from favorites | User: {}, Vacancy: {}", userId, vacancyId);
 
         favoriteRepository.deleteByStudentUserIdAndVacancyId(userId, vacancyId);
     }
 
     public List<VacancyDTO> getFavorites(Authentication auth) {
         UUID userId = getUserId(auth);
+        log.debug("Get favorites | User: {}", userId);
 
         return favoriteRepository.findAllByStudentUserId(userId)
                 .stream()

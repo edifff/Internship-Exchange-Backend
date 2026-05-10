@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.config.VacancySpecificationConfig;
@@ -17,6 +18,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.VacancyM
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class PublicVacancyService {
@@ -29,6 +31,7 @@ public class PublicVacancyService {
     public VacancyDTO get(UUID id) {
         Vacancy vacancy = getVacancy(id);
 
+        log.debug("Get vacancy | Id: {}", id);
         return vacancyMapper.toDTO(vacancy);
     }
 
@@ -37,12 +40,14 @@ public class PublicVacancyService {
 
         List<Vacancy> vacancies = vacancyRepository.findAll(specification);
 
+        log.debug("Search vacancies | Filter: {}", filter);
         return vacancyMapper.toDTO(vacancies);
     }
 
     public List<VacancyDTO> getAll() {
         List<Vacancy> vacancies = vacancyRepository.findAllByStatusAndDeletedAtIsNull(Status.ACCEPTED);
 
+        log.debug("Get all accepted vacancies");
         return vacancyMapper.toDTO(vacancies);
     }
 
@@ -50,6 +55,7 @@ public class PublicVacancyService {
         EmployerProfile employerProfile = getEmployer(id);
 
         List<Vacancy> vacancies = vacancyRepository.findAllByEmployer(employerProfile);
+        log.debug("Get company vacancies | EmployerId: {}", id);
 
         return vacancyMapper.toDTO(vacancies);
     }
@@ -59,6 +65,8 @@ public class PublicVacancyService {
 
         List<Vacancy> vacancies = vacancyRepository.findAllByEmployerAndDeletedAtIsNull(employerProfile);
 
+        log.debug("Get active company vacancies | EmployerId: {}", id);
+
         return vacancyMapper.toDTO(vacancies);
     }
 
@@ -66,6 +74,8 @@ public class PublicVacancyService {
         EmployerProfile employerProfile = getEmployer(id);
 
         List<Vacancy> vacancies = vacancyRepository.findAllByEmployerAndDeletedAtIsNotNull(employerProfile);
+
+        log.debug("Get deleted company vacancies | EmployerId: {}", id);
 
         return vacancyMapper.toDTO(vacancies);
     }

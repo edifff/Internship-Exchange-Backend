@@ -1,6 +1,7 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateEmployerProfileRequest;
@@ -16,6 +17,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.StudentP
 
 import java.time.Year;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ProfileService {
@@ -31,6 +33,8 @@ public class ProfileService {
 
     public ProfileDTO getMyProfil(Authentication auth) {
         User user = getUserFromAuth(auth);
+        log.debug("Loaded user profile. ID: {}, Roles: {}", user.getId(), user.getRoles());
+
         boolean isStudent =user.hasRole("ROLE_STUDENT");
         boolean isEmployer = user.hasRole("ROLE_EMPLOYER");
         ProfileDTO.ProfileDTOBuilder builder = ProfileDTO.builder()
@@ -71,6 +75,8 @@ public class ProfileService {
 
     public StudentProfileDTO updateStudentProfile(Authentication auth, UpdateStudentProfileRequest request) {
         User user = getUserFromAuth(auth);
+        log.info("Updating student profile for user: {}", user.getId());
+
         StudentProfile studentProfile = profileStudentRepository.findByUserId(user.getId());
 
         if (request.getResume() != null) {
@@ -99,6 +105,7 @@ public class ProfileService {
 
     public EmployerProfileDTO updateEmployerProfile(Authentication auth, UpdateEmployerProfileRequest request) {
         User user = getUserFromAuth(auth);
+        log.info("Updating employer profile for user: {}", user.getId());
 
         EmployerProfile employerProfile = employerProfileRepository.findByUserId(user.getId());
 

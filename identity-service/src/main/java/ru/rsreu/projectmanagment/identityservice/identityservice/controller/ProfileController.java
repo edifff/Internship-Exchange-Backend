@@ -3,6 +3,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.respon
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.StudentProfileDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.service.ProfileService;
 
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("/profiles")
@@ -23,7 +25,7 @@ public class ProfileController {
 
     @GetMapping("/me")
     public ProfileDTO getMyProfile(Authentication auth){
-        System.out.println("AUTH IN CONTROLLER: " + auth);
+        log.info("Fetching profile for user: {}", auth.getName());
         return profileService.getMyProfil(auth);
     }
 

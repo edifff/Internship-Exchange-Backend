@@ -2,6 +2,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 import jakarta.persistence.EntityExistsException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateApplicationRequest;
@@ -21,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ApplicationService {
@@ -37,6 +39,7 @@ public class ApplicationService {
 
         UUID studentId = principal.getId();
 
+        log.info("Application attempt: student={}, vacancy={}", studentId, request.getVacancyId());
         if (applicationRepository.existsByStudentUserIdAndVacancyId( studentId, request.getVacancyId())) {
             throw new EntityExistsException("Application already exists");
         }
@@ -68,6 +71,7 @@ public class ApplicationService {
                 .build();
 
         applicationRepository.save(application);
+        log.info("Application created successfully: applicationId={}, student={}, vacancy={}", application.getId(), studentId, request.getVacancyId());
     }
 
     public List<ApplicationDTO> getMyApplications(Authentication auth) {

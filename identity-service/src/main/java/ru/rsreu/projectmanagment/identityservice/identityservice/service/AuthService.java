@@ -4,6 +4,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -57,6 +59,7 @@ public class AuthService {
 
     @Transactional
     public AuthResponse register(@Valid RegisterRequest request) {
+        log.info("Registration attempt for email: {}, role: {}", request.getEmail(), request.getRole());
 
         Role role = roleRepository.findByName(request.getRole()).orElseThrow(
                 () -> new ConflictException("User already exists"));
@@ -79,6 +82,7 @@ public class AuthService {
 
         }
 
+        log.info("User registered successfully: {}", user.getEmail());
         return buildAuthResponse(user);
     }
 
@@ -88,12 +92,14 @@ public class AuthService {
                 () -> new NotFoundException("User not found"));
 
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPasswordHash())) {
+            log.warn("Failed login attempt for email: {}", loginRequest.getEmail());
             throw new BadCredentialsException("Invalid username or password");
-        }
-        user.setLastLoginAt(Instant.now());
+            }
+            user.setLastLoginAt(Instant.now());
 
-        userRepository.save(user);
+            userRepository.save(user);
 
+        log.info("User logged in: {}", user.getEmail());
         return buildAuthResponse(user);
     }
 
@@ -118,6 +124,7 @@ public class AuthService {
         User user = userRepository.findByEmailWithRoles(email).orElseThrow(
                 () -> new NotFoundException("User not found"));
 
+        log.debug("Token refreshed for user: {}", email);
         return buildAuthResponse(user);
     }
 

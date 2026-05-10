@@ -2,6 +2,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateRolesRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.UserDTO;
@@ -15,6 +16,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.UserMapp
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -24,18 +26,25 @@ public class UserService {
     private final UserMapper userMapper;
 
     public List<UserDTO> getAllUser() {
+        log.debug("Admin: get all users");
         return userMapper.toListDTO( userRepository.findAll());
     }
 
     public boolean deleteUser(UUID id) {
-        if (!userRepository.existsById(id)) return false;
+        if (!userRepository.existsById(id)) {
+            log.warn("Admin: delete user failed, not found | Id: {}", id);
+            return false;
+        }
 
         userRepository.deleteById(id);
+        log.info("Admin: delete user | Id: {}", id);
 
         return true;
     }
 
     public UserDTO getById(UUID id) {
+        log.debug("Admin: get user | Id: {}", id);
+
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
@@ -53,6 +62,8 @@ public class UserService {
 
         userRepository.save(user);
 
+        log.info("Admin: update role | UserId: {}, Role: {}", id, request.getRole());
+
         return userMapper.toDTO(user);
     }
 
@@ -66,6 +77,8 @@ public class UserService {
         boolean isDelete=user.deleteRole(role);
 
         userRepository.save(user);
+
+        log.info("Admin: delete role | UserId: {}, Role: {}", id, request.getRole());
 
         return isDelete;
     }

@@ -16,6 +16,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.exception.APIEx
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -23,6 +24,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(APIExeption.class)
     public ResponseEntity<ErrorResponse> handleApiException(APIExeption e) {
+        log.warn("API Exception: {} | Message: {}", e.getHttpStatus(), e.getMessage());
 
         ErrorResponse response = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
@@ -37,6 +39,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException e){
+        log.warn("Authentication failed: {}", e.getMessage());
 
         ErrorResponse response = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
@@ -49,6 +52,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationErrors(MethodArgumentNotValidException e){
+        log.warn("Validation failed: {}", e.getBindingResult().getFieldErrors().stream()
+                .map(err -> err.getField() + ": " + err.getDefaultMessage())
+                .collect(Collectors.joining(", ")));
         Map<String, String> validationErrors = new HashMap<>();
 
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
