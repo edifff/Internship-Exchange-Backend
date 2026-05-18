@@ -61,4 +61,7 @@ public class Vacancy {
     )
     private Set<Specialty> specialties;
 
+    public void addSpesialty(Specialty specialty){
+        specialties.add(specialty);
+    }
 }

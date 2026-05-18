@@ -52,12 +52,19 @@ public class SpecialtyService {
         return mapper.toDTO(specialty);
     }
 
-    public SpecialtyDTO get(UUID id) {
+    public SpecialtyDTO getDTO(UUID id) {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));
 
         log.debug("Get specialty | Id: {}", id);
         return mapper.toDTO(specialty);
+    }
+
+    public Specialty getEntity(UUID id) {
+        Specialty specialty = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Spesialty not found"));
+
+        return specialty;
     }
 
     public List<SpecialtyDTO> getAll() {

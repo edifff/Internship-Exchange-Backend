@@ -15,6 +15,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.respon
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
 import ru.rsreu.projectmanagment.identityservice.identityservice.service.SpecialtyService;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -42,8 +43,8 @@ public class SpecialtyController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Получить конкретную")
-    public void get(@PathVariable("id") UUID id){
-        service.get(id);
+    public SpecialtyDTO get(@PathVariable("id") UUID id){
+        return service.getDTO(id);
     }
 
     @DeleteMapping("/{id}")
@@ -55,8 +56,8 @@ public class SpecialtyController {
 
     @GetMapping("")
     @Operation(summary = "Получить все")
-    public void getAll(){
-        service.getAll();
+    public List<SpecialtyDTO> getAll(){
+        return service.getAll();
     }
 
 }

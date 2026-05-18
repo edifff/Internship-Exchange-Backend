@@ -11,6 +11,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reques
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.EmployerProfile;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.UserPrincipal;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
@@ -30,6 +31,7 @@ public class EmployerVacancyService {
     private final VacancyRepository vacancyRepository;
     private final EmployerProfileRepository employerProfileRepository;
     private final VacancyMapper vacancyMapper;
+    private final SpecialtyService specialtyService;
 
     public void create(CreateVacancyRequest createVacancyResponse) {
         EmployerProfile employer = getCurrentEmployer();
@@ -42,6 +44,11 @@ public class EmployerVacancyService {
         vacancy.setDeletedAt(null);
         vacancy.setUpdatedAt(null);
         vacancy.setStatus(Status.PENDING);
+
+        for(UUID specialty : createVacancyResponse.getSpecialtys()){
+            Specialty sp = specialtyService.getEntity(specialty);
+            vacancy.addSpesialty(sp);
+        }
 
         vacancyRepository.save(vacancy);
         log.info("Vacancy created: id={}, status=PENDING", vacancy.getId());

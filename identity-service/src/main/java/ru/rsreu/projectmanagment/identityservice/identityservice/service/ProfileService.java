@@ -81,7 +81,9 @@ public class ProfileService {
 
         if (studentProfile == null) {
             log.debug("Student profile not found. Creating new profile for UserId: {}", user.getId());
-            studentProfile = StudentProfile.builder().user(user).build();
+            studentProfile = StudentProfile.builder()
+                    .user(user)
+                    .build();
         }
 
 

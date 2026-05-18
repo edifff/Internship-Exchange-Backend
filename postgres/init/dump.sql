@@ -348,6 +348,10 @@ CREATE TABLE public.vacancy_specialties (
 
 ALTER TABLE public.vacancy_specialties OWNER TO postgres;
 
+ALTER TABLE public.files ADD COLUMN file_data BYTEA NOT NULL DEFAULT '\x';
+-- Опционально: создаем индекс для быстрого поиска по владельцу
+CREATE INDEX idx_files_owner_id ON public.files(owner_id);
+
 --
 -- Data for Name: applications; Type: TABLE DATA; Schema: public; Owner: postgres
 --
