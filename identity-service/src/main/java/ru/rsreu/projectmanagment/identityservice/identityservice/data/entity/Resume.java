@@ -21,7 +21,7 @@ public class Resume {
     @GeneratedValue
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String titel;
 
     @CreationTimestamp

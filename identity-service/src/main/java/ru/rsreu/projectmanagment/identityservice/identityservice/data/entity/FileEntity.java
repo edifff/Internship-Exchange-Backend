@@ -37,7 +37,6 @@ public class FileEntity {
     @Column(name = "file_type", nullable = false)
     private FileType fileType;
 
-    @Lob
     @Basic(fetch = FetchType.LAZY)
     @Column(name = "file_data", nullable = false)
     private byte[] data;
