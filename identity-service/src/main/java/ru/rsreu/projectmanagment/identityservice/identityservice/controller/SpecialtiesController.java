@@ -7,13 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateSpecialtyRequest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateSpecialtyRequest;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.SpecialtyDTO;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
-import ru.rsreu.projectmanagment.identityservice.identityservice.service.SpecialtyService;
+import ru.rsreu.projectmanagment.identityservice.identityservice.service.SpecialtiesService;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,9 +18,9 @@ import java.util.UUID;
 @RequestMapping("/specialty")
 @AllArgsConstructor
 @Tag(name = "Specialty Managment", description = "CRUD специальностей")
-public class SpecialtyController {
+public class SpecialtiesController {
 
-    private final SpecialtyService service;
+    private final SpecialtiesService service;
 
     @PostMapping("/")
     @PreAuthorize("hasRole('ADMIN')")

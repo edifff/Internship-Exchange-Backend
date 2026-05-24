@@ -151,17 +151,34 @@ ALTER TABLE public.favorites
 -- Name: files; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.files (
-    id uuid NOT NULL,
-    created_at date,
-    file_key character varying(255),
-    file_name character varying(255),
-    file_size integer,
-    file_url character varying(255),
-    mime_type character varying(255),
-    owner_id uuid,
-    resume_id uuid
+CREATE TABLE public.files
+(
+    id UUID PRIMARY KEY,
+
+    file_name VARCHAR(255) NOT NULL,
+
+    mime_type VARCHAR(255) NOT NULL,
+
+    file_size BIGINT NOT NULL,
+
+    file_type VARCHAR(50) NOT NULL,
+
+    file_data BYTEA NOT NULL,
+
+    owner_id UUID NOT NULL,
+
+    created_at TIMESTAMP NOT NULL,
+
+    CONSTRAINT fk_files_owner
+        FOREIGN KEY (owner_id)
+            REFERENCES users(id)
 );
+
+CREATE INDEX idx_files_owner_id
+    ON public.files(owner_id);
+
+CREATE INDEX idx_files_type
+    ON public.files(file_type);
 
 
 ALTER TABLE public.files OWNER TO postgres;
@@ -388,7 +405,7 @@ COPY public.favorites (id, created_at, student_id, vacancy_id) FROM stdin;
 -- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.files (id, created_at, file_key, file_name, file_size, file_url, mime_type, owner_id, resume_id) FROM stdin;
+COPY public.files (id, created_at, file_name, file_size, mime_type, owner_id) FROM stdin;
 \.
 
 

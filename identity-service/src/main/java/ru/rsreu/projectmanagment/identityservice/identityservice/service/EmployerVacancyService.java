@@ -31,7 +31,7 @@ public class EmployerVacancyService {
     private final VacancyRepository vacancyRepository;
     private final EmployerProfileRepository employerProfileRepository;
     private final VacancyMapper vacancyMapper;
-    private final SpecialtyService specialtyService;
+    private final SpecialtiesService specialtiesService;
 
     public void create(CreateVacancyRequest createVacancyResponse) {
         EmployerProfile employer = getCurrentEmployer();
@@ -45,8 +45,8 @@ public class EmployerVacancyService {
         vacancy.setUpdatedAt(null);
         vacancy.setStatus(Status.PENDING);
 
-        for(UUID specialty : createVacancyResponse.getSpecialtys()){
-            Specialty sp = specialtyService.getEntity(specialty);
+        for(UUID specialty : createVacancyResponse.getSpecialties()){
+            Specialty sp = specialtiesService.getEntity(specialty);
             vacancy.addSpesialty(sp);
         }
 

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class UpdateVacancyRequest {
@@ -24,5 +25,5 @@ public class UpdateVacancyRequest {
     @Schema(example = "2026-06-15")
     private LocalDate endedAt;
 
-    private List<String> specialtys;
+    private List<UUID> specialties;
 }

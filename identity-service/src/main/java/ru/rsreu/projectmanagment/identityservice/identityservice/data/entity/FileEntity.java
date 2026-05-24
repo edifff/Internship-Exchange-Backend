@@ -2,26 +2,27 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UuidGenerator;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.FileType;
 
+import java.time.LocalDate;
 import java.util.UUID;
 import java.time.LocalDateTime;
 
 
 @Entity
 @Table(name = "files")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @UuidGenerator
     private UUID id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
-    private User owner;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id")
-    private Resume resume;
 
     @Column(name = "file_name", nullable = false)
     private String fileName;
@@ -32,9 +33,19 @@ public class FileEntity {
     @Column(name = "file_size", nullable = false)
     private Long fileSize;
 
-    @Column(name = "file_data", columnDefinition = "bytea", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "file_type", nullable = false)
+    private FileType fileType;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "file_data", nullable = false)
     private byte[] data;
 
-    @Column(name = "created_at")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 }

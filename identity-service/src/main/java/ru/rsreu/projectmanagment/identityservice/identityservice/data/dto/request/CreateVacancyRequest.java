@@ -34,6 +34,6 @@ public class CreateVacancyRequest {
     @Schema(example = "2026-06-15")
     private LocalDate endedAt;
 
-    private List<UUID> specialtys;
+    private List<UUID> specialties;
 
 }

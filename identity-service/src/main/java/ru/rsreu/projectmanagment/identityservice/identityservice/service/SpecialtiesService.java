@@ -7,7 +7,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reques
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateSpecialtyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.SpecialtyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtiesRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 import ru.rsreu.projectmanagment.identityservice.identityservice.mapper.SpecialtyMapper;
 
@@ -17,9 +17,9 @@ import java.util.UUID;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class SpecialtyService {
+public class SpecialtiesService {
 
-    private final SpecialtyRepository repository;
+    private final SpecialtiesRepository repository;
     private final SpecialtyMapper mapper;
 
     public void create(CreateSpecialtyRequest createSpecialtyRequest) {

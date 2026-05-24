@@ -6,7 +6,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Spe
 import java.util.List;
 import java.util.UUID;
 
-public interface SpecialtyRepository extends JpaRepository<Specialty, UUID> {
+public interface SpecialtiesRepository extends JpaRepository<Specialty, UUID> {
 
     List<Specialty> id(UUID id);
 

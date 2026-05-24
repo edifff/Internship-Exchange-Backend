@@ -1,7 +1,6 @@
 package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response;
 
 import lombok.Data;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,5 +14,5 @@ public class VacancyDTO {
     private String city;
     private LocalDate startedAt;
     private LocalDate endedAt;
-    private List<String> specialtys;
+    private List<String> specialties;
 }

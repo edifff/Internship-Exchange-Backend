@@ -3,7 +3,9 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.repositor
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.FileEntity;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface FileEntityRepository extends JpaRepository<FileEntity, UUID> {
+    Optional<FileEntity> findByIdAndOwnerId(UUID id, UUID ownerId);
 }

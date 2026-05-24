@@ -7,21 +7,20 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Spe
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.filter.VacancyFilter;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtiesRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Join;
-import org.springframework.data.jpa.domain.Specification;
 import ru.rsreu.projectmanagment.identityservice.identityservice.exception.NotFoundException;
 
 @Component
 @AllArgsConstructor
 public class VacancySpecificationConfig {
 
-    private final SpecialtyRepository specialtyRepository;
+    private final SpecialtiesRepository specialtiesRepository;
 
     public Specification<Vacancy> build(VacancyFilter filter) {
         return (root, query, criteriaBuilder) -> {
@@ -58,7 +57,7 @@ public class VacancySpecificationConfig {
 
             if (filter.getSpecialtyId() != null) {
 
-                Specialty specialty = specialtyRepository.findById(filter.getSpecialtyId())
+                Specialty specialty = specialtiesRepository.findById(filter.getSpecialtyId())
                         .orElseThrow(() -> new NotFoundException("Specialty not found"));
 
                 Join<Object, Object> join = root.join("specialties");

@@ -2,31 +2,39 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Entity
+@Table(name = "resumes")
 @Getter
 @Setter
 @Builder
-@Entity
-@Table(name = "resumes")
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class Resume {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id", unique = true)
-    private StudentProfile student;
-
+    @Column(nullable = false)
     private String titel;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
+    @CreationTimestamp
     private LocalDate createdAt;
+
+    @UpdateTimestamp
     private LocalDate updatedAt;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false, unique = true)
+    private StudentProfile student;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "file_id", nullable = false)
+    private FileEntity file;
 }

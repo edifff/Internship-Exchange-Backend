@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
-import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtyRepository;
+import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.SpecialtiesRepository;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SpecialtyHandler {
 
-    private final SpecialtyRepository repository;
+    private final SpecialtiesRepository repository;
 
     @Named("mapSpecialties")
     public Set<Specialty> mapSpecialties(List<String> codes) {
