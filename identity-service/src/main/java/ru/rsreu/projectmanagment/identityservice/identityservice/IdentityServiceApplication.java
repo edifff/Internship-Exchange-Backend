@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 public class IdentityServiceApplication {
 
-    //TODO Отзывы о компаниях
     //TODO Рейтинг
     //TODO Отклик на ванаксию доделать, очень странно, что смотрятся все отклики без приаязки к вакансиям
     //TODO Уведомления

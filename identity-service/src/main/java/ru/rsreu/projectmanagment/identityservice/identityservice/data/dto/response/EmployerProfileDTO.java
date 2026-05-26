@@ -12,6 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployerProfileDTO {
+    private UUID userId;
     private String companyName;
     private String description;
     private String websiteLink;
