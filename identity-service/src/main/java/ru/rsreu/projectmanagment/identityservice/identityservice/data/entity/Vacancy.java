@@ -5,6 +5,7 @@ import lombok.*;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -61,7 +62,16 @@ public class Vacancy {
     )
     private Set<Specialty> specialties;
 
-    public void addSpesialty(Specialty specialty){
-        specialties.add(specialty);
+    public void addSpesialty(Specialty specialty) {
+        if (specialties == null) {
+            specialties = new HashSet<>();
+        }
+        // Проверяем по ID, чтобы избежать дубликатов при маппинге
+        if (specialty != null && specialty.getId() != null) {
+            if (specialties.stream().noneMatch(s ->
+                    s.getId() != null && s.getId().equals(specialty.getId()))) {
+                specialties.add(specialty);
+            }
+        }
     }
 }
