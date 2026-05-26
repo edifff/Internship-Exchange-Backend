@@ -22,7 +22,7 @@ public class Resume {
     private UUID id;
 
     @Column(name = "title", nullable = false)
-    private String titel;
+    private String title;
 
     @CreationTimestamp
     private LocalDate createdAt;

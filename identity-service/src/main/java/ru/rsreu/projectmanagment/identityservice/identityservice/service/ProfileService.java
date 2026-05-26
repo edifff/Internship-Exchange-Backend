@@ -91,6 +91,7 @@ public class ProfileService {
             Resume resume = resumeRepository.findById(request.getResume())
                     .orElseThrow(() -> new NotFoundException("Resume not found"));
             studentProfile.setResume(resume);
+            resume.setStudent(studentProfile);
         }
 
         if (request.getAvatar() != null) {

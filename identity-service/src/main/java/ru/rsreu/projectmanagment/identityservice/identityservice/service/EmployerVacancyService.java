@@ -33,22 +33,14 @@ public class EmployerVacancyService {
     private final VacancyMapper vacancyMapper;
     private final SpecialtiesService specialtiesService;
 
-    public void create(CreateVacancyRequest createVacancyResponse) {
+    public void create(CreateVacancyRequest request) {
         EmployerProfile employer = getCurrentEmployer();
         log.info("Creating vacancy by employer: {}", employer.getUserId());
 
-        Vacancy vacancy = vacancyMapper.toEntity(createVacancyResponse);
-
+        Vacancy vacancy = vacancyMapper.toEntity(request);
         vacancy.setEmployer(employer);
         vacancy.setCreatedAt(LocalDate.now());
-        vacancy.setDeletedAt(null);
-        vacancy.setUpdatedAt(null);
         vacancy.setStatus(Status.PENDING);
-
-        for(UUID specialty : createVacancyResponse.getSpecialties()){
-            Specialty sp = specialtiesService.getEntity(specialty);
-            vacancy.addSpesialty(sp);
-        }
 
         vacancyRepository.save(vacancy);
         log.info("Vacancy created: id={}, status=PENDING", vacancy.getId());
