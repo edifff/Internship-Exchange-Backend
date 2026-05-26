@@ -30,8 +30,19 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
-      MAIL_USERNAME: safedack@yandex.ru
-      MAIL_PASSWORD: wax150wax
+
+        # ✉️ Почта (обязательно для автоконфигурации JavaMailSender)
+      SPRING_MAIL_HOST: smtp.yandex.ru
+      SPRING_MAIL_PORT: 465
+      SPRING_MAIL_USERNAME: safedack@yandex.ru
+      SPRING_MAIL_PASSWORD: wax150wax
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE: "true"
+      SPRING_MAIL_PROTOCOL: smtps
+
+        # 🔧 Кастомные @Value из EmailService.java
+      APP_EMAIL_FROM: safedack@yandex.ru
+      APP_FRONTEND_URL: http://localhost:3000
 
 volumes:
   postgres_data:
