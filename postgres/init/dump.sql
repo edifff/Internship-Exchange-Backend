@@ -245,6 +245,67 @@ COPY public.vacancy_moderation (id, comment, created_at, decision, admin_id, vac
 COPY public.vacancy_specialties (vacancy_id, specialty_id) FROM stdin;
 \.
 
+-- 1. Дополнительные пользователи
+INSERT INTO public.users (id, email, password_hash, is_active, created_at) VALUES
+('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'ivan.petrov@mail.ru', '$2a$10$dummyhash1234567890abcdefghijklmnopqrstuv', true, '2026-05-01 10:00:00+03'),
+('b2c3d4e5-f6a7-8901-bcde-f12345678901', 'maria.sidorova@mail.ru', '$2a$10$dummyhash1234567890abcdefghijklmnopqrstuv', true, '2026-05-02 11:30:00+03'),
+('c3d4e5f6-a7b8-9012-cdef-123456789012', 'hr@techcorp.ru', '$2a$10$dummyhash1234567890abcdefghijklmnopqrstuv', true, '2026-04-15 09:00:00+03'),
+('d4e5f6a7-b8c9-0123-def0-234567890123', 'jobs@innovate.io', '$2a$10$dummyhash1234567890abcdefghijklmnopqrstuv', true, '2026-04-20 14:20:00+03');
+
+-- 2. Назначение ролей (студентам и работодателям)
+INSERT INTO public.user_role (user_id, role_id) VALUES
+('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'de3c03f6-ae4c-42ca-9f2b-76bc8ca9bfab'), -- ROLE_STUDENT
+('b2c3d4e5-f6a7-8901-bcde-f12345678901', 'de3c03f6-ae4c-42ca-9f2b-76bc8ca9bfab'), -- ROLE_STUDENT
+('c3d4e5f6-a7b8-9012-cdef-123456789012', '90d617cd-3782-468a-96c9-e8aa668e98f5'), -- ROLE_EMPLOYER
+('d4e5f6a7-b8c9-0123-def0-234567890123', '90d617cd-3782-468a-96c9-e8aa668e98f5'); -- ROLE_EMPLOYER
+
+-- 3. Профили студентов
+INSERT INTO public.student_profile (user_id, full_name, graduation_year) VALUES
+('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'Иван Петров', 2025),
+('b2c3d4e5-f6a7-8901-bcde-f12345678901', 'Мария Сидорова', 2026);
+
+-- 4. Профили работодателей
+INSERT INTO public.employer_profile (user_id, company_name, description, website_link) VALUES
+('c3d4e5f6-a7b8-9012-cdef-123456789012', 'TechCorp', 'Крупный системный интегратор', 'https://techcorp.ru'),
+('d4e5f6a7-b8c9-0123-def0-234567890123', 'Innovate IO', 'Стартап в сфере AI и Big Data', 'https://innovate.io');
+
+-- 5. Файлы (резюме)
+INSERT INTO public.files (id, file_name, mime_type, file_size, file_type, file_data, owner_id, created_at) VALUES
+('44444444-4444-4444-4444-444444444444', 'resume_ivan.pdf', 'application/pdf', 152000, 'RESUME', E'\\x255044462D312E34', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', '2026-05-01'),
+('55555555-5555-5555-5555-555555555555', 'resume_maria.pdf', 'application/pdf', 189000, 'RESUME', E'\\x255044462D312E34', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', '2026-05-02');
+
+-- 6. Резюме
+INSERT INTO public.resumes (id, title, content, created_at, updated_at, student_id, file_id) VALUES
+('66666666-6666-6666-6666-666666666666', 'Junior Java Developer', 'Spring Boot, PostgreSQL, Git. Опыт стажировки 6 мес.', '2026-05-01', '2026-05-05', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', '44444444-4444-4444-4444-444444444444'),
+('77777777-7777-7777-7777-777777777777', 'Frontend React Developer', 'React, TypeScript, Redux, Figma. 2 пет-проекта.', '2026-05-02', '2026-05-10', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', '55555555-5555-5555-5555-555555555555');
+
+-- 7. Специальности
+INSERT INTO public.specialties (id, code, is_active, name) VALUES
+('e1e2e3e4-f5f6-7890-1111-222233334444', '09.03.01', true, 'Информатика и вычислительная техника'),
+('f2f3f4f5-a6b7-8901-2222-333344445555', '02.03.02', true, 'Фундаментальная информатика и ИТ'),
+('a3b4c5d6-e7f8-9012-3333-444455556666', '10.05.01', true, 'Компьютерная безопасность');
+
+-- 8. Вакансии
+INSERT INTO public.vacancies (id, employer_id, title, description, city, start_date, end_date, status, created_at) VALUES
+('11111111-1111-1111-1111-111111111111', 'c3d4e5f6-a7b8-9012-cdef-123456789012', 'Junior Java Developer', 'Разработка микросервисов, код-ревью, участие в Agile.', 'Москва', '2026-06-01', '2026-12-31', 'ACCEPTED', '2026-05-01'),
+('22222222-2222-2222-2222-222222222222', 'c3d4e5f6-a7b8-9012-cdef-123456789012', 'Frontend React', 'Верстка SPA, интеграция REST API, оптимизация.', 'Санкт-Петербург', '2026-07-01', '2027-01-01', 'PENDING', '2026-05-10'),
+('33333333-3333-3333-3333-333333333333', 'd4e5f6a7-b8c9-0123-def0-234567890123', 'Data Scientist Intern', 'Анализ данных, построение ML-моделей, Python.', 'Казань', '2026-08-01', '2026-11-30', 'REVIEWED', '2026-05-15');
+
+-- 9. Отклики на вакансии (Applications)
+INSERT INTO public.applications (id, student_id, vacancy_id, resume_id, cover_letter, status, created_at) VALUES
+('88888888-8888-8888-8888-888888888888', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', '11111111-1111-1111-1111-111111111111', '66666666-6666-6666-6666-666666666666', 'Хочу развиваться в enterprise разработке', 'SENT', '2026-05-22'),
+('99999999-9999-9999-9999-999999999999', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', '22222222-2222-2222-2222-222222222222', '77777777-7777-7777-7777-777777777777', 'Ищу стажировку в крутой команде', 'REVIEWED', '2026-05-23');
+
+-- 10. Избранное
+INSERT INTO public.favorites (id, student_id, vacancy_id, created_at) VALUES
+('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', '33333333-3333-3333-3333-333333333333', '2026-05-24 12:00:00+03'),
+('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', '11111111-1111-1111-1111-111111111111', '2026-05-24 15:30:00+03');
+
+-- 11. Отзывы о компаниях
+INSERT INTO public.company_reviews (id, student_id, employer_id, rating, comment, created_at) VALUES
+('cccccccc-cccc-cccc-cccc-cccccccccccc', 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'c3d4e5f6-a7b8-9012-cdef-123456789012', 5, 'Отличное место для старта карьеры, менторство топ!', '2026-05-25'),
+('dddddddd-dddd-dddd-dddd-dddddddddddd', 'b2c3d4e5-f6a7-8901-bcde-f12345678901', 'd4e5f6a7-b8c9-0123-def0-234567890123', 4, 'Быстрые собеседования, но много задач в первый месяц.', '2026-05-25');
+
 -- 3. Добавление FK и индексов (гарантирует порядок создания)
 ALTER TABLE public.user_role ADD CONSTRAINT fk_user_role_user FOREIGN KEY (user_id) REFERENCES public.users(id);
 ALTER TABLE public.user_role ADD CONSTRAINT fk_user_role_role FOREIGN KEY (role_id) REFERENCES public.roles(id);
