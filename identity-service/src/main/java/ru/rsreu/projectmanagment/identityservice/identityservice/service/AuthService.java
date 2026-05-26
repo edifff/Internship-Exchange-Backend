@@ -61,8 +61,14 @@ public class AuthService {
     public AuthResponse register(@Valid RegisterRequest request) {
         log.info("Registration attempt for email: {}, role: {}", request.getEmail(), request.getRole());
 
-        Role role = roleRepository.findByName(request.getRole()).orElseThrow(
-                () -> new ConflictException("User already exists"));
+        if (userRepository.findByEmailWithRoles(request.getEmail()).isPresent()) {
+            log.warn("Registration failed: email already exists | Email: {}", request.getEmail());
+            throw new ConflictException("User with this email already exists");
+        }
+
+        Role role = roleRepository.findByName(request.getRole())
+                .orElseThrow(() -> new NotFoundException("Role not found: " + request.getRole()));
+
         User user = User.builder()
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
@@ -73,13 +79,10 @@ public class AuthService {
         user.addRole(role);
 
         try {
-
             user = userRepository.save(user);
-
         } catch (DataIntegrityViolationException e) {
-
-            throw new ConflictException("User already exists");
-
+            log.warn("Registration failed due to DB constraint: {}", request.getEmail());
+            throw new ConflictException("User with this email already exists");
         }
 
         log.info("User registered successfully: {}", user.getEmail());

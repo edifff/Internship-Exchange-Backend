@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Результат модерации</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+<h2>Статус вакансии обновлён</h2>
+<p>Уважаемый работодатель,</p>
+<p>Ваша вакансия <b>"<span th:text="${vacancyTitle}"></span>"</b> прошла модерацию.</p>
+<p>Результат: <b th:text="${decision}"></b></p>
+<p th:if="${comment != null && !comment.isEmpty()}">Комментарий администратора: <i th:text="${comment}"></i></p>
+<p>Вы можете управлять вакансией в личном кабинете: <a th:href="${frontendUrl}">Перейти в кабинет</a></p>
+<hr>
+<small style="color: #777;">Это автоматическое уведомление. Не отвечайте на него.</small>
+</body>
+</html>

@@ -30,6 +30,8 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+      MAIL_USERNAME: safedack@yandex.ru
+      MAIL_PASSWORD: wax150wax
 
 volumes:
   postgres_data:
