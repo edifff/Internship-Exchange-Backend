@@ -3,6 +3,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateSpecialtyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateSpecialtyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.SpecialtyDTO;
@@ -22,6 +23,7 @@ public class SpecialtiesService {
     private final SpecialtiesRepository repository;
     private final SpecialtyMapper mapper;
 
+    @Transactional
     public void create(CreateSpecialtyRequest createSpecialtyRequest) {
         log.info("Create specialty | Code: {}, Name: {}", createSpecialtyRequest.getCode(), createSpecialtyRequest.getName());
         Specialty specialty = mapper.toEntity(createSpecialtyRequest);
@@ -30,6 +32,7 @@ public class SpecialtiesService {
         repository.save(specialty);
     }
 
+    @Transactional
     public SpecialtyDTO update(UUID id, UpdateSpecialtyRequest request) {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));
@@ -52,6 +55,7 @@ public class SpecialtiesService {
         return mapper.toDTO(specialty);
     }
 
+    @Transactional(readOnly = true)
     public SpecialtyDTO getDTO(UUID id) {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));
@@ -60,6 +64,7 @@ public class SpecialtiesService {
         return mapper.toDTO(specialty);
     }
 
+    @Transactional(readOnly = true)
     public Specialty getEntity(UUID id) {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));
@@ -67,12 +72,14 @@ public class SpecialtiesService {
         return specialty;
     }
 
+    @Transactional(readOnly = true)
     public List<SpecialtyDTO> getAll() {
         List<Specialty> specialties = repository.findAll();
 
         return mapper.toDTO(specialties);
     }
 
+    @Transactional
     public void delete(UUID id) {
         Specialty specialty = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Spesialty not found"));

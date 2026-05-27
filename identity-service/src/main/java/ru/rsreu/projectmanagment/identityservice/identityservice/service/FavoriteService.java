@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Favorite;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.StudentProfile;
@@ -30,6 +31,7 @@ public class FavoriteService {
     private final ProfileStudentRepository studentRepository;
     private final VacancyMapper mapper;
 
+    @Transactional
     public void addToFavorites(UUID vacancyId, Authentication auth) {
         UUID userId = getUserId(auth);
 
@@ -52,6 +54,7 @@ public class FavoriteService {
         favoriteRepository.save(favorite);
     }
 
+    @Transactional
     public void removeFromFavorites(UUID vacancyId, Authentication auth) {
         UUID userId = getUserId(auth);
         log.info("Remove from favorites | User: {}, Vacancy: {}", userId, vacancyId);
@@ -59,6 +62,7 @@ public class FavoriteService {
         favoriteRepository.deleteByStudentUserIdAndVacancyId(userId, vacancyId);
     }
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> getFavorites(Authentication auth) {
         UUID userId = getUserId(auth);
         log.debug("Get favorites | User: {}", userId);

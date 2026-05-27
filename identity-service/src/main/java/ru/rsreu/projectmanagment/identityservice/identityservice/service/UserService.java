@@ -4,6 +4,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateRolesRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.UserDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Role;
@@ -25,6 +26,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    @Transactional(readOnly = true)
     public List<UserDTO> getAllUser() {
         log.debug("Admin: get all users");
         return userMapper.toListDTO( userRepository.findAll());
@@ -42,6 +44,7 @@ public class UserService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public UserDTO getById(UUID id) {
         log.debug("Admin: get user | Id: {}", id);
 
@@ -51,6 +54,7 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
+    @Transactional
     public UserDTO updateRole(UUID id, UpdateRolesRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -67,6 +71,7 @@ public class UserService {
         return userMapper.toDTO(user);
     }
 
+    @Transactional
     public boolean deleteRole(UUID id, UpdateRolesRequest request) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found"));

@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.CreateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateVacancyRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
@@ -33,6 +34,7 @@ public class EmployerVacancyService {
     private final VacancyMapper vacancyMapper;
     private final SpecialtiesService specialtiesService;
 
+    @Transactional
     public void create(CreateVacancyRequest request) {
         EmployerProfile employer = getCurrentEmployer();
         log.info("Creating vacancy by employer: {}", employer.getUserId());
@@ -46,6 +48,7 @@ public class EmployerVacancyService {
         log.info("Vacancy created: id={}, status=PENDING", vacancy.getId());
     }
 
+    @Transactional
     public VacancyDTO update(UUID id, UpdateVacancyRequest request) {
         Vacancy vacancy = getOwnedVacancy(id);
         log.info("Updating vacancy: id={}, by employer: {}", id, vacancy.getEmployer().getUserId());
@@ -61,6 +64,7 @@ public class EmployerVacancyService {
         return vacancyMapper.toDTO(vacancy);
     }
 
+    @Transactional
     public void archive(UUID id) {
         Vacancy vacancy = getOwnedVacancy(id);
         log.info("Archiving vacancy: id={}", id);

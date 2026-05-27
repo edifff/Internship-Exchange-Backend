@@ -3,6 +3,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Vacancy;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.enums.Status;
@@ -21,6 +22,7 @@ public class AdminVacancyModerationService {
     private final VacancyRepository vacancyRepository;
     private final VacancyMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> getPendingVacancy() {
         List<Vacancy> vacancies = vacancyRepository
                 .findAllByStatusAndDeletedAtIsNull(Status.PENDING);

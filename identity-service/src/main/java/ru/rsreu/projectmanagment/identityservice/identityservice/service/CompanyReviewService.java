@@ -31,6 +31,7 @@ public class CompanyReviewService {
     private final EmployerProfileRepository employerRepo;
     private final CompanyReviewMapper mapper;
 
+    @Transactional
     public CompanyReviewDTO createReview(CreateCompanyReviewRequest request, Authentication auth) {
         UUID studentId = ((UserPrincipal) auth.getPrincipal()).getId();
 
@@ -71,6 +72,7 @@ public class CompanyReviewService {
                 .toList();
     }
 
+    @Transactional
     public void deleteReview(UUID id, Authentication auth) {
         UUID studentId = ((UserPrincipal) auth.getPrincipal()).getId();
         CompanyReview review = repository.findByIdAndStudentUserId(id, studentId)

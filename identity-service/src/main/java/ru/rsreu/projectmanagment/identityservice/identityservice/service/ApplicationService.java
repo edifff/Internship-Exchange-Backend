@@ -34,6 +34,7 @@ public class ApplicationService {
     private final ProfileStudentRepository studentRepository;
     private final ApplicationMapper applicationMapper;
 
+    @Transactional
     public void apply(CreateApplicationRequest request, Authentication auth) {
         UserPrincipal principal = (UserPrincipal) auth.getPrincipal();
         UUID studentId = principal.getId();
@@ -76,6 +77,7 @@ public class ApplicationService {
                 application.getId(), studentId, request.getVacancyId());
     }
 
+    @Transactional(readOnly = true)
     public List<ApplicationDTO> getMyApplications(Authentication auth) {
         UUID studentId =
                 ((UserPrincipal) auth.getPrincipal()).getId();

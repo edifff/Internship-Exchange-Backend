@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.config.VacancySpecificationConfig;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.VacancyDTO;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.EmployerProfile;
@@ -28,6 +29,7 @@ public class PublicVacancyService {
     private final EmployerProfileRepository employerProfileRepository;
     private final VacancySpecificationConfig vacancySpecificationConfig;
 
+    @Transactional(readOnly = true)
     public VacancyDTO get(UUID id) {
         Vacancy vacancy = getVacancy(id);
 
@@ -35,6 +37,7 @@ public class PublicVacancyService {
         return vacancyMapper.toDTO(vacancy);
     }
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> search(VacancyFilter filter){
         Specification<Vacancy> specification = vacancySpecificationConfig.build(filter);
 
@@ -44,6 +47,7 @@ public class PublicVacancyService {
         return vacancyMapper.toDTO(vacancies);
     }
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> getAll() {
         List<Vacancy> vacancies = vacancyRepository.findAllByStatusAndDeletedAtIsNull(Status.ACCEPTED);
 
@@ -51,6 +55,7 @@ public class PublicVacancyService {
         return vacancyMapper.toDTO(vacancies);
     }
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> getAllCompanyVacancy(UUID id) {
         EmployerProfile employerProfile = getEmployer(id);
 
@@ -60,6 +65,7 @@ public class PublicVacancyService {
         return vacancyMapper.toDTO(vacancies);
     }
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> getAllActivityCompanyVacancy(UUID id) {
         EmployerProfile employerProfile =getEmployer(id);
 
@@ -70,6 +76,7 @@ public class PublicVacancyService {
         return vacancyMapper.toDTO(vacancies);
     }
 
+    @Transactional(readOnly = true)
     public List<VacancyDTO> getAllDeletedCompanyVacancy(UUID id) {
         EmployerProfile employerProfile = getEmployer(id);
 

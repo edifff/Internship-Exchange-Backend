@@ -89,6 +89,7 @@ public class AuthService {
         return buildAuthResponse(user);
     }
 
+    @Transactional
     public AuthResponse login(@Valid LoginRequest loginRequest) {
 
         User user = userRepository.findByEmailWithRoles(loginRequest.getEmail()).orElseThrow(
