@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateEmployerProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.request.UpdateStudentProfileRequest;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.response.EmployerProfileDTO;
@@ -30,10 +31,10 @@ public class ProfileService {
     private final ResumeRepository resumeRepository;
     private final FileEntityRepository fileEntityRepository;
 
-
+    @Transactional(readOnly = true)
     public ProfileDTO getMyProfil(Authentication auth) {
         User user = getUserFromAuth(auth);
-        log.debug("Loaded user profile. ID: {}, Roles: {}", user.getId(), user.getRoles());
+        log.debug("Loaded user profile. ID: {}, Roles: {}", user.getId(), user.getRoles().stream().map(Role::getName).toList() );
 
         boolean isStudent =user.hasRole("ROLE_STUDENT");
         boolean isEmployer = user.hasRole("ROLE_EMPLOYER");
@@ -73,6 +74,7 @@ public class ProfileService {
         return user;
     }
 
+    @Transactional(readOnly = true)
     public StudentProfileDTO updateStudentProfile(Authentication auth, UpdateStudentProfileRequest request) {
         User user = getUserFromAuth(auth);
         log.info("Updating student profile for user: {}", user.getId());
@@ -112,6 +114,7 @@ public class ProfileService {
         return studentProfileMapper.toDTO(studentProfile);
     }
 
+    @Transactional(readOnly = true)
     public EmployerProfileDTO updateEmployerProfile(Authentication auth, UpdateEmployerProfileRequest request) {
         User user = getUserFromAuth(auth);
         log.info("Updating employer profile for user: {}", user.getId());
