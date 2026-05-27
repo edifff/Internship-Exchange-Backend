@@ -3,6 +3,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Application;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.EmployerProfile;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.repository.ApplicationRepository;
@@ -21,6 +22,7 @@ public class WeeklyReportService {
     private final EmployerProfileRepository employerProfileRepository;
     private final EmailService emailService;
 
+    @Transactional(readOnly = true)
     public void generateAndSendWeeklyReports() {
         LocalDate weekAgo = LocalDate.now().minusDays(7);
         List<EmployerProfile> employers = employerProfileRepository.findAll();

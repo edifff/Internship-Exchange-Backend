@@ -74,13 +74,12 @@ public class ProfileService {
         return user;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public StudentProfileDTO updateStudentProfile(Authentication auth, UpdateStudentProfileRequest request) {
         User user = getUserFromAuth(auth);
         log.info("Updating student profile for user: {}", user.getId());
 
         StudentProfile studentProfile = profileStudentRepository.findByUserId(user.getId());
-
         if (studentProfile == null) {
             log.debug("Student profile not found. Creating new profile for UserId: {}", user.getId());
             studentProfile = StudentProfile.builder()
@@ -88,12 +87,23 @@ public class ProfileService {
                     .build();
         }
 
-
         if (request.getResume() != null) {
-            Resume resume = resumeRepository.findById(request.getResume())
-                    .orElseThrow(() -> new NotFoundException("Resume not found"));
+            FileEntity file = fileEntityRepository.findById(request.getResume())
+                    .orElseThrow(() -> new NotFoundException("File not found"));
+
+            Resume resume = studentProfile.getResume();
+            if (resume == null) {
+                resume = Resume.builder()
+                        .title("Моё резюме")
+                        .student(studentProfile)
+                        .file(file)
+                        .build();
+            } else {
+                resume.setFile(file);
+            }
+
+            resumeRepository.save(resume);
             studentProfile.setResume(resume);
-            resume.setStudent(studentProfile);
         }
 
         if (request.getAvatar() != null) {
@@ -105,7 +115,6 @@ public class ProfileService {
         if (request.getFullName() != null) {
             studentProfile.setFullName(request.getFullName());
         }
-
         if (request.getGraduationYear() != null) {
             studentProfile.setGraduationYear(Year.of(request.getGraduationYear()));
         }
