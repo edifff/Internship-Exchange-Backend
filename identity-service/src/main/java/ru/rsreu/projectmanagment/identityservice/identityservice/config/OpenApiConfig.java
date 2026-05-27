@@ -19,20 +19,22 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("Internship Marketplace API")
                         .version("1.0.0")
-                        .description("API биржи стажировок: аутентификация, профили, управление пользователями")
+                        .description("API биржи стажировок")
                         .contact(new Contact()
                                 .name("edifff")
                                 .email("mishapronin2015@gmail.com")))
-                .addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("Bearer Authentication", createBearerScheme()));
+                        .addSecuritySchemes("bearerAuth", createBearerScheme()));
     }
+
     private SecurityScheme createBearerScheme() {
         return new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
-                .name("bearerAuth")
                 .scheme("bearer")
                 .bearerFormat("JWT")
-                .description("Вставь access-токен (без префикса 'Bearer ')");
+                .name("Authorization")
+                .in(SecurityScheme.In.HEADER)
+                .description("Введите access-токен (без префикса 'Bearer ')");
     }
 }
