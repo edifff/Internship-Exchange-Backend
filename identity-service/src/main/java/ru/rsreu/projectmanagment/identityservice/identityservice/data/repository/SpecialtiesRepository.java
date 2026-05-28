@@ -3,12 +3,9 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.repositor
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.Specialty;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface SpecialtiesRepository extends JpaRepository<Specialty, UUID> {
-
-    List<Specialty> id(UUID id);
 
     Specialty findByName(String name);
 }

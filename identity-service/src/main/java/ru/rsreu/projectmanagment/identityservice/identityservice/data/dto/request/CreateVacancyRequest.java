@@ -2,6 +2,7 @@ package ru.rsreu.projectmanagment.identityservice.identityservice.data.dto.reque
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
 @Data
 public class CreateVacancyRequest {
 
-    @NotBlank
+    @NotNull
     private UUID employerUUID;
 
     @Schema(example = "Царь во дворца")

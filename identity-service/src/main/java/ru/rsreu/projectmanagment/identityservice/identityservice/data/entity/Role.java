@@ -25,7 +25,7 @@ public class Role {
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return name != null ? name.hashCode() : 0;
     }
 
     @Override

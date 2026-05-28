@@ -57,11 +57,8 @@ public class VacancySpecificationConfig {
 
             if (filter.getSpecialtyId() != null) {
 
-                Specialty specialty = specialtiesRepository.findById(filter.getSpecialtyId())
-                        .orElseThrow(() -> new NotFoundException("Specialty not found"));
-
-                Join<Object, Object> join = root.join("specialties");
-                predicates.add(criteriaBuilder.equal(join.get("id"), filter.getSpecialtyId()));
+                Join<Vacancy, Specialty> specialtyJoin = root.join("specialties");
+                predicates.add(criteriaBuilder.equal(specialtyJoin.get("id"), filter.getSpecialtyId()));
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

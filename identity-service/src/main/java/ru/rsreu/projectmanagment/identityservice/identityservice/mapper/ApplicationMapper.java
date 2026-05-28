@@ -7,7 +7,7 @@ import ru.rsreu.projectmanagment.identityservice.identityservice.data.entity.App
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ApplicationMapper {
     List<ApplicationDTO> toDTO(List<Application> applications);
 

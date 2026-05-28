@@ -53,13 +53,13 @@ public class ApplicationService {
             throw new ForbiddenException("Vacancy unavailable");
         }
 
-        Resume resume = resumeRepository.findByStudentUserId(studentId)
-                .orElseThrow(() -> new NotFoundException("Please upload your resume first"));
+        Resume resume = resumeRepository.findById(request.getResumeId())
+                .orElseThrow(() -> new NotFoundException("Резюме не найдено"));
 
-        if (request.getResumeId() != null && !resume.getId().equals(request.getResumeId())) {
-            log.warn("Client sent resumeId={}, but system uses actual student resumeId={}",
-                    request.getResumeId(), resume.getId());
+        if (!resume.getStudent().getUserId().equals(studentId)) {
+            throw new ForbiddenException("Нельзя откликаться чужим резюме");
         }
+
 
         StudentProfile student = studentRepository.findByUserId(studentId);
 

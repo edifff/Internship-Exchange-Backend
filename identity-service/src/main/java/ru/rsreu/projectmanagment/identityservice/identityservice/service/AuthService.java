@@ -121,6 +121,9 @@ public class AuthService {
             throw new BadCredentialsException("Refresh token has expired");
         }
 
+        stored.setRevoked(true);
+        refreshTokenRepository.save(stored);
+
         DecodedJWT jwt = jwtService.verifyToken(refreshRequest.getRefreshToken());
 
         String email = jwtService.extractUserEmail(jwt);
