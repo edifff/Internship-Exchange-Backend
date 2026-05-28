@@ -12,10 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class IdentityServiceApplication {
 
-    //TODO Рейтинг
     //TODO Отклик на ванаксию доделать, очень странно, что смотрятся все отклики без приаязки к вакансиям
-    //TODO Уведомления
-    //TODO Связать зависисые элементы
     //TODO Зарегистрироваться как админ можно если в запросе внести роль админа
     public static void main(String[] args) {
         SpringApplication.run(IdentityServiceApplication.class, args);

@@ -27,7 +27,7 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "message_type")
+    @Column(name = "mеssage_type")
     private MessageType messageType;
 
     @JdbcTypeCode(SqlTypes.JSON)
