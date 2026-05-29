@@ -123,7 +123,7 @@ public class ProfileService {
         return studentProfileMapper.toDTO(studentProfile);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public EmployerProfileDTO updateEmployerProfile(Authentication auth, UpdateEmployerProfileRequest request) {
         User user = getUserFromAuth(auth);
         log.info("Updating employer profile for user: {}", user.getId());
