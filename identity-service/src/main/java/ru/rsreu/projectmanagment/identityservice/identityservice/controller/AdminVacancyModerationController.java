@@ -29,7 +29,7 @@ public class AdminVacancyModerationController {
 
     @PatchMapping("{id}")
     @Operation(summary = "Изменение статуса вакансии после рассмотрения")
-    public void setStatus(@PathVariable("id") UUID id,@RequestBody String status){
+    public void setStatus(@PathVariable("id") UUID id, @RequestParam String status) {
         adminVacancyModerationService.setStatus(id, status);
     }
 }
